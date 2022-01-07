@@ -27,8 +27,6 @@ cpu=`sysctl -n machdep.cpu.brand_string`
 cpu_arch=`uname -m`
 log_info "处理器信息： ${cpu}，${cpu_arch}"
 
-exit 0
-
 if [[ ${cpu} =~ Apple ]] && [[ ${cpu_arch} =~ arm ]]
 then
   log_info "安装homebrew"
