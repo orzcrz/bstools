@@ -27,7 +27,7 @@ cpu=`sysctl -n machdep.cpu.brand_string`
 cpu_arch=`uname -m`
 log_info "处理器信息： ${cpu}，${cpu_arch}"
 
-if [[ ${cpu} =~ Apple ]] && [[ ${cpu_arch} =~ arm ]]
+if [[ ${cpu} =~ "Apple" ]] && [[ ${cpu_arch} =~ "arm" ]]
 then
   log_info "安装homebrew"
   local brew_path=/opt/homebrew
@@ -104,7 +104,7 @@ log_debug "==> 检查 rbenv"
 cmd_exists rbenv
 if [ $? -ne 0 ]; then
 	log_info "准备安装 rbenv"
-	brew install rbenv && log_info "已安装 rbenv"
+	brew install rbenv ruby-build rbenv-vars && log_info "已安装 rbenv"
   log_info "导入 rbenv 环境变量"
   echo "" >> ${profile}
   echo "## rbenv" >> ${profile}
@@ -130,6 +130,23 @@ if [ $? -ne 0 ]; then
   echo "## gem" >> ${profile}
   echo 'export GEM_HOME=~/.gem' >> ${profile}
   echo "export PATH=\"$gem_user_bin_dir:\$PATH\"" >> ${profile}
+else
+  log_debug "已存在，跳过安装"
+fi
+
+## pyenv
+log_debug "==> 检查 pyenv"
+cmd_exists pyenv
+if [ $? -ne 0 ]; then
+	log_info "准备安装 pyenv"
+	brew install pyenv pyenv-virtualenv && log_info "已安装 cocoapods"
+
+  echo "" >> ${profile}
+  echo "## pyenv" >> ${profile}
+  echo 'export PYENV_ROOT="~/.pyenv"' >> ${profile}
+  echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> ${profile}
+  echo 'eval "$(pyenv init -)"' >> ${profile}
+  echo 'eval "$(pyenv virtualenv-init -)"' >> ${profile}
 else
   log_debug "已存在，跳过安装"
 fi

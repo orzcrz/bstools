@@ -23,6 +23,7 @@ sh <(curl https://raw.githubusercontent.com/orzcrz/mac-config/master/setup.sh)
 - ruby
 - rbenv
 - cocoapods
+- pyenv
 
 ### 软链
 
