@@ -8,7 +8,7 @@
 
 
 ```
-sh <(curl https://raw.githubusercontent.com/orzcrz/mac-config/master/setup.sh)
+curl -L https://raw.githubusercontent.com/orzcrz/mac-config/master/setup.sh | bash
 ```
 
 ## 配置项
