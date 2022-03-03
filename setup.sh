@@ -14,7 +14,7 @@ echo "################################"
 echo "$(tput sgr0)"
 
 root_path=~/.mac-config
-config_path=~/.mac-config/configs
+config_path=${root_path}/configs
 rm -rf "${root_path}"
 git clone git@github.com:orzcrz/mac-config.git ${root_path}
 
