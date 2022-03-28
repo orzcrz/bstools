@@ -13,6 +13,8 @@ echo "  准备配置环境"
 echo "################################"
 echo "$(tput sgr0)"
 
+cd ~
+
 root_path=~/.mac-config
 config_path=${root_path}/configs
 rm -rf "${root_path}"
@@ -39,10 +41,19 @@ then
   echo "" >> ${profile}
   echo "## homebrew" >> ${profile}
   echo 'export PATH=/opt/homebrew/bin:$PATH' >> ${profile}
-  echo 'export PATH=/opt/homebrew/bin:$PATH' >> ${profile}
-  echo "export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles" >> ${profile}
-  echo "export HOMEBREW_BREW_GIT_REMOTE=https://mirrors.ustc.edu.cn/brew.git" >> ${profile}
-  echo "export HOMEBREW_CORE_GIT_REMOTE=https://mirrors.ustc.edu.cn/homebrew-core.git" >> ${profile}
+
+  log_info "替换 homebrew 源地址"
+  
+  local brew_repo="$(brew --repo)"
+
+  cd ${brew_repo}
+  git remote set-url origin https://mirrors.ustc.edu.cn/brew.git
+
+  cd "${brew_repo}/Library/Taps/homebrew/homebrew-core"
+  git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-core.git
+
+  cd "${brew_repo}/Library/Taps/homebrew/homebrew-cask"
+  git remote set-url origin https://mirrors.ustc.edu.cn/homebrew-cask.git
 
   cd ~
 fi
