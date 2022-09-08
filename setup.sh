@@ -150,7 +150,7 @@ log_debug "==> 检查 pyenv"
 cmd_exists pyenv
 if [ $? -ne 0 ]; then
 	log_info "准备安装 pyenv"
-	brew install pyenv pyenv-virtualenv && log_info "已安装 cocoapods"
+	brew install pyenv pyenv-virtualenv && log_info "已安装 pyenv"
 
   echo "" >> ${profile}
   echo "## pyenv" >> ${profile}
