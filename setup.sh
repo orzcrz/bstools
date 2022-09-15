@@ -4,7 +4,6 @@
 # Copyright © 2022 BaldStudio. All rights reserved.
 
 . shells/logger.sh
-. shells/utils.sh
 
 set -e
 set -u
@@ -18,14 +17,16 @@ profiles_path=$root_dir/profiles
 zshrc=$profiles_path/.zshrc
 zsh_profile=$profiles_path/.zprofile
 
-# 安装工具，导入环境变量
+# 安装bstools
 function setup_bstools() {
-  log_info "尝试安装bstools"
+  log_info "==> 尝试安装 bstools"
 
   rm -rf $root_path
   local tools_url=git@github.com:orzcrz/bstools.git
   git clone --recurse-submodules $tools_url $root_path
+  log_info "已下载最新版本到本地"
 
+  log_info "导入环境变量"
   local pattern="## bstools"
   local env="export PATH=\$HOME/.bstools/bin:\$PATH"
   local line="\n$pattern\n$env"
@@ -33,35 +34,41 @@ function setup_bstools() {
     $zsh_profile
   )
   for i in "${!files[@]}"; do
-      local file="${files[i]}"
-      if [[ -f "$file" ]];then
-        grep -F "$pattern" "$file" 1>>/dev/null 2>>/dev/null || echo -e "$line" >> "$file"
-      fi
+    local file="${files[i]}"
+    if [[ -f "$file" ]];then
+      grep -F "$pattern" "$file" 1>/dev/null 2>&1 || echo -e "$line" >> "$file"
+    fi
   done
 
   source ~/.zprofile
-  cmd_exists bs
-  if [ $? -ne 0 ]; then
-    log_error "bs 未找到"
+  if command -v bs 1>/dev/null 2>&1; then
+    log_info "安装成功"
+  else
+    log_error "安装失败"
     exit 1
   fi
 }
 
-# arm版本的Mac电脑，手动安装Homebrew
+# arm版本的Mac上安装Homebrew
 function setup_brew_if_needed() {
-  log_info "尝试安装Homebrew"
+  log_info "==> 尝试安装 Homebrew"
+  if command -v brew 1>/dev/null 2>&1; then
+    log_info "已存在，跳过安装"
+    return
+  fi
+
   local cpu=`sysctl -n machdep.cpu.brand_string`
   local cpu_arch=`uname -m`
   log_info "处理器信息： $cpu，$cpu_arch"
   if [[ $cpu =~ "Apple" ]] && [[ $cpu_arch =~ "arm" ]]; then
-    log_info "安装Homebrew"
+    log_info "安装 arm版 Homebrew"
     local brew_repo=/opt/homebrew
     local remote_url=https://github.com/Homebrew/brew/tarball/master
     sudo mkdir -p $brew_repo
     sudo chown -R $(whoami) $brew_repo
     curl -L $remote_url | tar xz --strip 1 -C $brew_repo
 
-    log_info "导入 Homebrew 环境变量"    
+    log_info "导入环境变量"    
     local bottles_url=https://mirrors.ustc.edu.cn/homebrew-bottles
     echo -e "\n## homebrew" >> $zsh_profile
     echo "export PATH=$brew_repo/bin:\$PATH" >> $zsh_profile
@@ -84,131 +91,144 @@ function setup_brew_if_needed() {
 
     cd ~
     source ~/.zprofile
+    if command -v brew 1>/dev/null 2>&1; then
+      log_info "安装成功"
+    else
+      log_error "安装失败"
+      exit 1
+    fi
+  else
+    log_error "非arm版的没适配，自己动手吧"
+    exit 1
   fi
 }
 
 ## pyenv
 function setup_pyenv() {
-  log_info "==> 检查 pyenv"
-  cmd_exists pyenv
-  if [ $? -ne 0 ]; then
-    log_info "准备安装 pyenv"
-    brew install pyenv pyenv-virtualenv && log_info "已安装 pyenv"
-
-    echo -e "\n## pyenv" >> $zsh_profile
-    echo 'export PYENV_ROOT=$HOME/.pyenv' >> $zsh_profile
-    echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> $zsh_profile
-    echo 'if command -v pyenv 1>/dev/null 2>&1; then'
-    echo '  eval "$(pyenv init -)"' >> $zsh_profile
-    echo '  eval "$(pyenv virtualenv-init -)"' >> $zsh_profile
-    echo 'fi'
-
-    log_info "pip源已在~/.pip中配置"
-
-    source ~/.zprofile
-    pyenv global 3.9.5
-  else
+  log_info "==> 尝试安装 pyenv"
+  if command -v bs 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
   fi
+
+  brew install pyenv pyenv-virtualenv && log_info "已安装 pyenv"
+
+  log_info "导入环境变量"
+  echo -e "\n## pyenv" >> $zsh_profile
+  echo 'export PYENV_ROOT=$HOME/.pyenv' >> $zsh_profile
+  echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> $zsh_profile
+  echo 'if command -v pyenv 1>/dev/null 2>&1; then'
+  echo '  eval "$(pyenv init -)"' >> $zsh_profile
+  echo '  eval "$(pyenv virtualenv-init -)"' >> $zsh_profile
+  echo 'fi'
+
+  log_info "pip源已在$HOME/.pip中配置"
+
+  source ~/.zprofile
+  if command -v pyenv 1>/dev/null 2>&1; then
+    log_info "安装成功"
+  else
+    log_error "安装失败"
+    exit 1
+  fi
+
+  log_info "将全局python切到3.9.5"
+  pyenv global 3.9.5
 }
 
 ## wget
 function setup_wget() {
   ## wget
-  log_info "==> 检查 wget"
-  cmd_exists wget
-  if [ $? -ne 0 ]; then
-    log_info "准备安装 wget"
-    brew install wget && log_info "已安装 wget"
-  else
+  log_info "==> 尝试安装 wget"
+  if command -v wget 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
   fi
+
+  brew install wget && log_info "已安装 wget"
 }
 
 ## cookiecutter
 function setup_cookiecutter() {
-  log_info "==> 检查 cookiecutter"
-  cmd_exists cookiecutter
-  if [ $? -ne 0 ]; then
-    log_info "准备安装 cookiecutter"
-    brew install cookiecutter && log_info "已安装 cookiecutter"
-  else
+  log_info "==> 尝试安装 cookiecutter"
+  if command -v cookiecutter 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
   fi
+
+  brew install cookiecutter && log_info "已安装 cookiecutter"
 }
 
 ## tree
 function setup_tree() {
-  log_info "==> 检查 tree"
-  cmd_exists tree
-  if [ $? -ne 0 ]; then
-    log_info "准备安装 tree"
-    brew install tree && log_info "已安装 tree"
-  else
+  log_info "==> 尝试安装 cookiecutter"
+  if command -v tree 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
   fi
+
+  brew install tree && log_info "已安装 tree"
 }
 
 ## rbenv
 function setup_rbenv() {
-  log_info "==> 将Ruby换成国内源"
+  log_info "==> 尝试将Ruby换成国内源"
   gem sources | grep 'http' | while read line; do
     gem source -r $line
   done
   gem source -a https://gems.ruby-china.com/
+  log_info "当前Ruby源为：https://gems.ruby-china.com/"
 
-  log_info "==> 检查 rbenv"
-  cmd_exists rbenv
-  if [ $? -ne 0 ]; then
-    log_info "准备安装 rbenv"
-    brew install rbenv ruby-build rbenv-vars && log_info "已安装 rbenv"
-
-    log_info "导入 rbenv 环境变量"
-    local mirror_url=https://cache.ruby-china.com
-    echo -e "\n## rbenv" >> $zsh_profile
-    echo 'export PATH=$HOME/.rbenv/bin:$PATH' >> $zsh_profile
-    echo "export RUBY_BUILD_MIRROR_URL=$mirror_url" >> $zsh_profile
-    echo 'if command -v rbenv 1>/dev/null 2>&1; then'
-    echo '  eval "$(rbenv init -)"' >> $zsh_profile
-    echo 'fi'
-
-    source ~/.zprofile
-    cmd_exists rbenv
-    if [ $? -ne 0 ]; then
-      log_error "rbenv 未找到"
-      exit 1
-    fi
-
-  else
+  log_info "==> 尝试安装 rbenv"
+  if command -v rbenv 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
+  fi
+
+  brew install rbenv ruby-build rbenv-vars && log_info "已安装 rbenv"
+
+  log_info "导入环境变量"
+  local mirror_url=https://cache.ruby-china.com
+  echo -e "\n## rbenv" >> $zsh_profile
+  echo 'export PATH=$HOME/.rbenv/bin:$PATH' >> $zsh_profile
+  echo "export RUBY_BUILD_MIRROR_URL=$mirror_url" >> $zsh_profile
+  echo 'if command -v rbenv 1>/dev/null 2>&1; then'
+  echo '  eval "$(rbenv init -)"' >> $zsh_profile
+  echo 'fi'
+
+  source ~/.zprofile
+  if command -v rbenv 1>/dev/null 2>&1; then
+    log_info "安装成功"
+  else
+    log_error "安装失败"
+    exit 1
   fi
 }
 
 ## cocoapods
 function setup_cocoapods() {
-  log_info "==> 检查 cocoapods"
-  cmd_exists cocoapods
-  if [ $? -ne 0 ]; then
-    log_info "准备安装 cocoapods"
-    ## 安装到 ~/.gem/目录
-    gem install cocoapods --user && log_info "已安装 cocoapods"
-
-    ## 环境设置
-    local install_dir=`gem env | grep "USER INSTALLATION DIRECTORY" | awk -F":" '{ print  $2 }' | tr -d '[:space:]'`
-    local bin_dir="$install_dir/bin"
-    echo -e "\n## gem" >> $zsh_profile
-    echo 'export GEM_HOME=$HOME/.gem' >> $zsh_profile
-    echo "export PATH=$bin_dir:\$PATH" >> $zsh_profile
-    
-    source ~/.zprofile
-    cmd_exists pod
-    if [ $? -ne 0 ]; then
-      log_error "pod 未找到"
-      exit 1
-    fi
-
-  else
+  log_info "==> 尝试安装 cocoapods"
+  if command -v pod 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
+  fi
+
+  log_info "安装路径为：$HOME/.gem/"
+  gem install cocoapods --user && log_info "已安装 cocoapods"
+
+  log_info "导入环境变量"
+  local install_dir=`gem env | grep "USER INSTALLATION DIRECTORY" | awk -F":" '{ print  $2 }' | tr -d '[:space:]'`
+  local bin_dir="$install_dir/bin"
+  echo -e "\n## gem" >> $zsh_profile
+  echo 'export GEM_HOME=$HOME/.gem' >> $zsh_profile
+  echo "export PATH=$bin_dir:\$PATH" >> $zsh_profile
+
+  source ~/.zprofile
+  if command -v pod 1>/dev/null 2>&1; then
+    log_info "安装成功"
+  else
+    log_error "安装失败"
+    exit 1
   fi
 }
 

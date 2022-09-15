@@ -4,13 +4,11 @@
 loglevel=0
 logfile="./$(date +'%F').log"
 
-log() {
-  local msg
-  local logtype
-  logtype=$1
-  msg=$2
-  datetime=$(date +'%F %H:%M:%S')
-  logformat="[${logtype}] ${datetime} [${FUNCNAME[2]} - $(caller 0 | awk '{print$1}')] ${msg}"
+function log() {
+  local logtype=$1
+  local msg=$2
+  local datetime=$(date +'%F %H:%M:%S')
+  local logformat="[${logtype}] ${datetime} [${FUNCNAME[2]} - $(caller 0 | awk '{print$1}')] ${msg}"
   {
   case $logtype in
   DEBUG)
@@ -25,18 +23,18 @@ log() {
   } #| tee -a $logfile
 }
 
-log_debug() {
+function log_debug() {
   log DEBUG "$*"
 }
 
-log_info() {
+function log_info() {
   log INFO "$*"
 }
 
-log_warning() {
+function log_warning() {
   log WARNING "$*"
 }
 
-log_error() {
+function log_error() {
   log ERROR "$*"
 }
