@@ -1,0 +1,6 @@
+# flutter
+export PUB_HOSTED_URL=http://pub.alibaba-inc.com
+export FLUTTER_STORAGE_BASE_URL=http://flutter-storage.alibaba-inc.com/taobao
+
+# cgtools
+export PATH="$HOME/.cgtools/bin:$PATH"

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+# Created by crzorz on 2022/09/15
+# Copyright © 2022 BaldStudio. All rights reserved.
+
+set -e
+set -u
+set -o pipefail
+
+entry=$(dirname "${BASH_SOURCE}")
+
+python "${entry}/bs.py" "$@"

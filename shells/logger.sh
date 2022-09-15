@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# debug:0; info:1; warn:2; error:3
+# debug:0; info:1; warning:2; error:3
 loglevel=0
 logfile="./$(date +'%F').log"
 
@@ -17,7 +17,7 @@ log() {
     [[ $loglevel -le 0 ]] && echo -e "\033[32m${logformat}\033[0m" ;;
   info)
     [[ $loglevel -le 1 ]] && echo -e "\033[34m${logformat}\033[0m" ;;
-  warn)
+  warning)
     [[ $loglevel -le 2 ]] && echo -e "\033[33m${logformat}\033[0m" ;;
   error)
     [[ $loglevel -le 3 ]] && echo -e "\033[31m${logformat}\033[0m" ;;
@@ -33,8 +33,8 @@ log_info() {
   log info "$*"
 }
 
-log_warn() {
-  log warn "$*"
+log_warning() {
+  log warning "$*"
 }
 
 log_error() {
