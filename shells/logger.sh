@@ -13,30 +13,30 @@ log() {
   logformat="[${logtype}] ${datetime} [${FUNCNAME[2]} - $(caller 0 | awk '{print$1}')] ${msg}"
   {
   case $logtype in
-  debug)
-    [[ $loglevel -le 0 ]] && echo -e "\033[32m${logformat}\033[0m" ;;
-  info)
-    [[ $loglevel -le 1 ]] && echo -e "\033[34m${logformat}\033[0m" ;;
-  warning)
+  DEBUG)
+    [[ $loglevel -le 0 ]] && echo -e "\033[34m${logformat}\033[0m" ;;
+  INFO)
+    [[ $loglevel -le 1 ]] && echo -e "\033[32m${logformat}\033[0m" ;;
+  WARNING)
     [[ $loglevel -le 2 ]] && echo -e "\033[33m${logformat}\033[0m" ;;
-  error)
+  ERROR)
     [[ $loglevel -le 3 ]] && echo -e "\033[31m${logformat}\033[0m" ;;
   esac
   } #| tee -a $logfile
 }
 
 log_debug() {
-  log debug "$*"
+  log DEBUG "$*"
 }
 
 log_info() {
-  log info "$*"
+  log INFO "$*"
 }
 
 log_warning() {
-  log warning "$*"
+  log WARNING "$*"
 }
 
 log_error() {
-  log error "$*"
+  log ERROR "$*"
 }

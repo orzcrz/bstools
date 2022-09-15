@@ -1,41 +1,40 @@
-# mac-config
+# bstools
 
-简化Mac环境的同步，懒人必备
+用工具同步本地环境，有点意思了不是吗？
 
 ## 使用
 
 **如果是已有环境，请先备份好$HOME下的已有配置文件，脚本涉及部分文件的删除替换。**
 
-
 ```
-curl -L https://raw.githubusercontent.com/orzcrz/mac-config/master/setup.sh | bash
+curl -L https://raw.githubusercontent.com/orzcrz/bstools/master/setup.sh | bash
 ```
 
 ## 配置项
 
+- oh-my-zsh
+
 ### 工具包
 
 - homebrew
-- oh-my-zsh
+- pyenv
 - wget
 - cookiecutter
 - tree
-- ruby
 - rbenv
 - cocoapods
-- pyenv
 
 ### 软链
 
-- zshrc
-- lldbinit
+- ~/.zshrc
+- ~/.zsh_profile
+- ~/.zsh_alias
+- ~/.lldbinit
+- ~/.pip
 
 ## 附加项
 
 ### 关于git的提交附带表情
-
-- 用法
-`git commit -m ':tada: 初始化提交'`
 
 - 出处
 在gitmoji里扒扒看 ，传送门：https://gitmoji.dev/
