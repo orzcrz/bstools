@@ -89,7 +89,6 @@ setup_bstools
 
 setup_brew_if_needed
 
-
 ## 删除已有配置
 rm -f ~/.zshrc
 rm -f ~/.zsh_profile

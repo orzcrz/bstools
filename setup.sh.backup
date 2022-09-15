@@ -75,7 +75,7 @@ fi
 
 ## wget
 log_debug "==> 检查 wget"
-cmd_exists cookiecutter
+cmd_exists wget
 if [ $? -ne 0 ]; then
 	log_info "准备安装 wget"
 	brew install wget && log_info "已安装 wget"
