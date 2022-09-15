@@ -16,8 +16,7 @@ root_dir="$HOME/.bstools"
 profiles_path=$root_dir/profiles
 
 zshrc=$profiles_path/.zshrc
-zsh_profile=$profiles_path/.zsh_profile
-zsh_alias=$profiles_path/.zsh_alias
+zsh_profile=$profiles_path/.zprofile
 
 # 安装工具，导入环境变量
 function setup_bstools() {
@@ -28,7 +27,7 @@ function setup_bstools() {
   git clone --recurse-submodules $tools_url $root_path
 
   local pattern="## bstools"
-  local env="export PATH=\"\$HOME/.bstools/bin:\$PATH\""
+  local env="export PATH=\$HOME/.bstools/bin:\$PATH"
   local line="\n$pattern\n$env"
   local files=(
     $zsh_profile
@@ -40,7 +39,7 @@ function setup_bstools() {
       fi
   done
 
-  source ~/.zsh_profile
+  source ~/.zprofile
   cmd_exists bs
   if [ $? -ne 0 ]; then
     log_error "bs 未找到"
@@ -65,8 +64,8 @@ function setup_brew_if_needed() {
     log_info "导入 Homebrew 环境变量"    
     local bottles_url=https://mirrors.ustc.edu.cn/homebrew-bottles
     echo -e "\n## homebrew" >> $zsh_profile
-    echo 'export PATH=/opt/homebrew/bin:$PATH' >> $zsh_profile
-    echo 'export PATH=/opt/homebrew/sbin:$PATH' >> $zsh_profile
+    echo "export PATH=$brew_repo/bin:\$PATH" >> $zsh_profile
+    echo "export PATH=$brew_repo/sbin:\$PATH" >> $zsh_profile
     echo "HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zsh_profile
 
     log_info "替换 Homebrew 源地址"
@@ -77,14 +76,14 @@ function setup_brew_if_needed() {
     cd $brew_repo
     git remote set-url origin $repo_url
 
-    cd "$brew_repo/Library/Taps/homebrew/homebrew-core"
+    local tap_dir=$brew_repo/Library/Taps/homebrew
+    cd "$tap_dir/homebrew-core"
     git remote set-url origin $core_url
-
-    cd "$brew_repo/Library/Taps/homebrew/homebrew-cask"
+    cd "$tap_dir/homebrew-cask"
     git remote set-url origin $cask_url
 
     cd ~
-    source ~/.zsh_profile
+    source ~/.zprofile
   fi
 }
 
@@ -99,11 +98,14 @@ function setup_pyenv() {
     echo -e "\n## pyenv" >> $zsh_profile
     echo 'export PYENV_ROOT=$HOME/.pyenv' >> $zsh_profile
     echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> $zsh_profile
-    echo 'eval "$(pyenv init -)"' >> $zsh_profile
-    echo 'eval "$(pyenv virtualenv-init -)"' >> $zsh_profile
+    echo 'if command -v pyenv 1>/dev/null 2>&1; then'
+    echo '  eval "$(pyenv init -)"' >> $zsh_profile
+    echo '  eval "$(pyenv virtualenv-init -)"' >> $zsh_profile
+    echo 'fi'
+
     log_info "pip源已在~/.pip中配置"
 
-    source ~/.zsh_profile
+    source ~/.zprofile
     pyenv global 3.9.5
   else
     log_info "已存在，跳过安装"
@@ -164,12 +166,13 @@ function setup_rbenv() {
     log_info "导入 rbenv 环境变量"
     local mirror_url=https://cache.ruby-china.com
     echo -e "\n## rbenv" >> $zsh_profile
-    echo 'export PATH="~/.rbenv/bin:$PATH"' >> $zsh_profile
-    echo 'eval "$(rbenv init -)"' >> $zsh_profile
+    echo 'export PATH=$HOME/.rbenv/bin:$PATH' >> $zsh_profile
     echo "export RUBY_BUILD_MIRROR_URL=$mirror_url" >> $zsh_profile
+    echo 'if command -v rbenv 1>/dev/null 2>&1; then'
+    echo '  eval "$(rbenv init -)"' >> $zsh_profile
+    echo 'fi'
 
-    source ~/.zsh_profile
-
+    source ~/.zprofile
     cmd_exists rbenv
     if [ $? -ne 0 ]; then
       log_error "rbenv 未找到"
@@ -194,8 +197,15 @@ function setup_cocoapods() {
     local install_dir=`gem env | grep "USER INSTALLATION DIRECTORY" | awk -F":" '{ print  $2 }' | tr -d '[:space:]'`
     local bin_dir="$install_dir/bin"
     echo -e "\n## gem" >> $zsh_profile
-    echo 'export GEM_HOME=~/.gem' >> $zsh_profile
-    echo "export PATH=\"$bin_dir:\$PATH\"" >> $zsh_profile
+    echo 'export GEM_HOME=$HOME/.gem' >> $zsh_profile
+    echo "export PATH=$bin_dir:\$PATH" >> $zsh_profile
+    
+    source ~/.zprofile
+    cmd_exists pod
+    if [ $? -ne 0 ]; then
+      log_error "pod 未找到"
+      exit 1
+    fi
 
   else
     log_info "已存在，跳过安装"
@@ -210,9 +220,7 @@ echo "$(tput sgr0)"
 
 log_warning "即将删除以下配置，请确认是否需要备份"
 echo "~/.zshrc"
-echo "~/.zsh_profile"
-echo "~/.zsh_alias"
-echo "~/.zsh_alias"
+echo "~/.zprofile"
 echo "~/.lldbinit"
 echo "~/.pip"
 
@@ -227,15 +235,13 @@ done
 
 ## 删除已有配置
 rm -f ~/.zshrc
-rm -f ~/.zsh_profile
-rm -f ~/.zsh_alias
+rm -f ~/.zprofile
 rm -f ~/.lldbinit
 rm -rf ~/.pip
 
 ## 软链当前配置
 ln -s $zshrc ~/.zshrc
-ln -s $zsh_profile ~/.zsh_profile
-ln -s $zsh_alias ~/.zsh_alias
+ln -s $zsh_profile ~/.zprofile
 ln -s ${profiles_path}/.lldbinit ~/.lldbinit
 ln -s ${profiles_path}/.pip ~/.pip
 

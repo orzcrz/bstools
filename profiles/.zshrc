@@ -17,7 +17,8 @@ source $MY_ZSH/oh-my-zsh.sh
 ## Source
 
 [ -f ~/.bash_profile ] && source ~/.bash_profile
-[ -f ~/.zsh_profile ] && source ~/.zsh_profile
-[ -f ~/.zsh_alias ] && source ~/.zsh_alias
+[ -f ~/.zprofile ] && source ~/.zprofile
 
 
+## Alias
+alias vscode="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"

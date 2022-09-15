@@ -28,7 +28,6 @@ curl -L https://raw.githubusercontent.com/orzcrz/bstools/master/setup.sh | bash
 
 - ~/.zshrc
 - ~/.zsh_profile
-- ~/.zsh_alias
 - ~/.lldbinit
 - ~/.pip
 
