@@ -240,8 +240,13 @@ ln -s ${profiles_path}/.lldbinit ~/.lldbinit
 ln -s ${profiles_path}/.pip ~/.pip
 
 setup_bstools
-
 setup_brew_if_needed
+setup_pyenv
+setup_wget
+setup_cookiecutter
+setup_tree
+setup_rbenv
+setup_cocoapods
 
 echo "$(tput setaf 2)"
 echo "################################"
