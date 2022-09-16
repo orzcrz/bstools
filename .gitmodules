@@ -1,9 +1,9 @@
 [submodule "oh-my-zsh"]
 	path = profiles/oh-my-zsh
 	url = git@github.com:ohmyzsh/ohmyzsh.git
-[submodule "zlldb"]
+[submodule "profiles/lldb/zlldb"]
 	path = profiles/lldb/zlldb
 	url = git@github.com:everettjf/zlldb.git
-[submodule "LLDB"]
-	path = profiles/lldb/LLDB
+[submodule "profiles/lldb/dk_lldb"]
+	path = profiles/lldb/dk_lldb
 	url = git@github.com:DerekSelander/LLDB.git
