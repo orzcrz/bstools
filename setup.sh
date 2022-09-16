@@ -262,7 +262,7 @@ rm -rf ~/.pip
 ## 软链当前配置
 ln -s $zshrc ~/.zshrc
 ln -s $zsh_profile ~/.zprofile
-ln -s ${profiles_path}/.lldbinit ~/.lldbinit
+ln -s ${profiles_path}/lldb/.lldbinit ~/.lldbinit
 ln -s ${profiles_path}/.pip ~/.pip
 
 setup_bstools
@@ -273,6 +273,17 @@ setup_cookiecutter
 setup_tree
 setup_rbenv
 setup_cocoapods
+
+# 安装lldb工具
+# https://github.com/facebook/chisel
+function setup_lldb_chisel() {
+  brew install chisel
+  echo -e "\n## chisel"
+  echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $zsh_profile
+}
+
+setup_lldb_chisel
+
 
 echo "$(tput setaf 2)"
 echo "################################"
