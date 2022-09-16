@@ -9,4 +9,14 @@ set -o pipefail
 
 entry=$(dirname "${BASH_SOURCE}")
 
+# check virtual env
+venv_path="$entry/../venv"
+
+# 检查 venv路径
+if [[ ! -d "$venv_path" ]];then
+    echo "INFO: First run, do setup..."
+    $entry/../setup
+fi
+
+source $venv_path/bin/activate
 python "${entry}/bs.py" "$@"

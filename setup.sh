@@ -40,6 +40,22 @@ function setup_bstools() {
     fi
   done
 
+  cd $root_dir
+  local py3=$(which python3)
+  log_info "Use python3 path: $py3"
+  local py3_v=`$py3 -V`
+  log_info "python version: $py3_v"
+
+  log_info "generate new venv."
+  local venv_path="venv"
+  $py3 -m venv $venv_path
+
+  source $venv_path/bin/activate
+  
+  set +e
+  pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+  set -e
+
   source ~/.zprofile
   if command -v bs 1>/dev/null 2>&1; then
     log_info "安装成功"
@@ -47,6 +63,8 @@ function setup_bstools() {
     log_error "安装失败"
     exit 1
   fi
+
+  cd ~
 }
 
 # arm版本的Mac上安装Homebrew
