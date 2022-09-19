@@ -15,7 +15,7 @@ root_dir="$HOME/.bstools"
 profiles_path=$root_dir/profiles
 
 zshrc=$profiles_path/.zshrc
-zsh_profile=$profiles_path/.zprofile
+zprofile=$profiles_path/.zprofile
 
 # 安装bstools
 function setup_bstools() {
@@ -31,7 +31,7 @@ function setup_bstools() {
   local env="export PATH=\$HOME/.bstools/bin:\$PATH"
   local line="\n$pattern\n$env"
   local files=(
-    $zsh_profile
+    $zprofile
   )
   for i in "${!files[@]}"; do
     local file="${files[i]}"
@@ -88,10 +88,10 @@ function setup_brew_if_needed() {
 
     log_info "导入环境变量"    
     local bottles_url=https://mirrors.ustc.edu.cn/homebrew-bottles
-    echo -e "\n## homebrew" >> $zsh_profile
-    echo "export PATH=$brew_repo/bin:\$PATH" >> $zsh_profile
-    echo "export PATH=$brew_repo/sbin:\$PATH" >> $zsh_profile
-    echo "HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zsh_profile
+    echo -e "\n## homebrew" >> $zprofile
+    echo "export PATH=$brew_repo/bin:\$PATH" >> $zprofile
+    echo "export PATH=$brew_repo/sbin:\$PATH" >> $zprofile
+    echo "HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
 
     log_info "替换 Homebrew 源地址"
     local repo_url=https://mirrors.ustc.edu.cn/brew.git
@@ -132,12 +132,12 @@ function setup_pyenv() {
   brew install pyenv pyenv-virtualenv && log_info "已安装 pyenv"
 
   log_info "导入环境变量"
-  echo -e "\n## pyenv" >> $zsh_profile
-  echo 'export PYENV_ROOT=$HOME/.pyenv' >> $zsh_profile
-  echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> $zsh_profile
+  echo -e "\n## pyenv" >> $zprofile
+  echo 'export PYENV_ROOT=$HOME/.pyenv' >> $zprofile
+  echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> $zprofile
   echo 'if command -v pyenv 1>/dev/null 2>&1; then'
-  echo '  eval "$(pyenv init -)"' >> $zsh_profile
-  echo '  eval "$(pyenv virtualenv-init -)"' >> $zsh_profile
+  echo '  eval "$(pyenv init -)"' >> $zprofile
+  echo '  eval "$(pyenv virtualenv-init -)"' >> $zprofile
   echo 'fi'
 
   log_info "pip源已在$HOME/.pip中配置"
@@ -207,11 +207,11 @@ function setup_rbenv() {
 
   log_info "导入环境变量"
   local mirror_url=https://cache.ruby-china.com
-  echo -e "\n## rbenv" >> $zsh_profile
-  echo 'export PATH=$HOME/.rbenv/bin:$PATH' >> $zsh_profile
-  echo "export RUBY_BUILD_MIRROR_URL=$mirror_url" >> $zsh_profile
+  echo -e "\n## rbenv" >> $zprofile
+  echo 'export PATH=$HOME/.rbenv/bin:$PATH' >> $zprofile
+  echo "export RUBY_BUILD_MIRROR_URL=$mirror_url" >> $zprofile
   echo 'if command -v rbenv 1>/dev/null 2>&1; then'
-  echo '  eval "$(rbenv init -)"' >> $zsh_profile
+  echo '  eval "$(rbenv init -)"' >> $zprofile
   echo 'fi'
 
   source ~/.zprofile
@@ -237,9 +237,9 @@ function setup_cocoapods() {
   log_info "导入环境变量"
   local install_dir=`gem env | grep "USER INSTALLATION DIRECTORY" | awk -F":" '{ print  $2 }' | tr -d '[:space:]'`
   local bin_dir="$install_dir/bin"
-  echo -e "\n## gem" >> $zsh_profile
-  echo 'export GEM_HOME=$HOME/.gem' >> $zsh_profile
-  echo "export PATH=$bin_dir:\$PATH" >> $zsh_profile
+  echo -e "\n## gem" >> $zprofile
+  echo 'export GEM_HOME=$HOME/.gem' >> $zprofile
+  echo "export PATH=$bin_dir:\$PATH" >> $zprofile
 
   source ~/.zprofile
   if command -v pod 1>/dev/null 2>&1; then
@@ -279,7 +279,7 @@ rm -rf ~/.pip
 
 ## 软链当前配置
 ln -s $zshrc ~/.zshrc
-ln -s $zsh_profile ~/.zprofile
+ln -s $zprofile ~/.zprofile
 ln -s ${profiles_path}/lldb/.lldbinit ~/.lldbinit
 ln -s ${profiles_path}/.pip ~/.pip
 
@@ -295,9 +295,9 @@ setup_cocoapods
 # 安装lldb工具
 # https://github.com/facebook/chisel
 function setup_lldb_chisel() {
-  brew install chisel
+  brew install chisel && log_info "已安装 chisel"
   echo -e "\n## chisel"
-  echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $zsh_profile
+  echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $zprofile
 }
 
 setup_lldb_chisel
