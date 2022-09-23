@@ -14,6 +14,7 @@ profiles_path=$root_dir/profiles
 
 zshrc=$profiles_path/.zshrc
 zprofile=$profiles_path/.zprofile
+lldbinit=$profiles_path/lldb/.lldbinit
 
 ## log
 
@@ -286,13 +287,21 @@ function setup_cocoapods() {
   fi
 }
 
+# 安装lldb工具
+# https://github.com/facebook/chisel
+function setup_lldb_chisel() {
+  brew install chisel && log_info "已安装 chisel"
+  echo -e "\n## chisel"
+  echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $lldbinit
+}
+
 echo "$(tput setaf 2)"
 echo "################################"
 echo "  准备配置环境"
 echo "################################"
 echo "$(tput sgr0)"
 
-log_warning "即将删除以下配置，请确认是否需要备份"
+log_warning "即将删除以下配置"
 log_warning "rm -f ~/.zshrc"
 log_warning "rm -f ~/.zprofile"
 log_warning "rm -f ~/.lldbinit"
@@ -309,7 +318,7 @@ rm -f ~/.gitignore_global
 ## 软链当前配置
 ln -s $zshrc ~/.zshrc
 ln -s $zprofile ~/.zprofile
-ln -s ${profiles_path}/lldb/.lldbinit ~/.lldbinit
+ln -s $lldbinit ~/.lldbinit
 ln -s ${profiles_path}/.pip ~/.pip
 ln -s ${profiles_path}/.gitignore_global ~/.gitignore_global
 
@@ -321,17 +330,7 @@ setup_cookiecutter
 setup_tree
 setup_rbenv
 setup_cocoapods
-
-# 安装lldb工具
-# https://github.com/facebook/chisel
-function setup_lldb_chisel() {
-  brew install chisel && log_info "已安装 chisel"
-  echo -e "\n## chisel"
-  echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $zprofile
-}
-
 setup_lldb_chisel
-
 
 echo "$(tput setaf 2)"
 echo "################################"
