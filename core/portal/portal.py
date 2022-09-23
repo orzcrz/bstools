@@ -15,8 +15,13 @@ from core.logger import logger, set_log_level
 from .routines import routines
 
 parser = argparse.ArgumentParser(prog='bs',
-                                 description="命令行工具箱")
-subparser = parser.add_subparsers(title="Commands", dest="command")
+                                 description="命令行工具箱",
+                                 epilog='工具箱版本 1.0.0')
+parser.add_argument('--verbose', 
+                    action='store_true', 
+                    default=False, 
+                    help="详细输出")
+subparser = parser.add_subparsers(title="目前支持的功能", dest="command")
 command_handler_map = {}
 
 def parse_args():
@@ -33,12 +38,14 @@ def register_commands():
     cmd = CommandClass()
     cmd_args_parser = subparser.add_parser(cmd.name(), 
                                            help=cmd.help(), 
-                                           description=cmd.description())
+                                           description=cmd.description(),
+                                           epilog='当前版本: %s' % cmd.version())
     cmd.args_parser(cmd_args_parser)
-    cmd_args_parser.add_argument("--verbose", 
-                                 action="store_true", 
+    cmd_args_parser.add_argument('--verbose', 
+                                 action='store_true', 
                                  default=False, 
                                  help="详细输出")
+
     command_handler_map[cmd.name()] = cmd;
 
 

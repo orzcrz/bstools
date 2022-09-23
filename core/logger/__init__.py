@@ -21,7 +21,7 @@ stream = logging.StreamHandler()
 stream.setLevel(LOG_LEVEL)
 stream.setFormatter(formatter)
 
-logger = logging.getLogger('cg')
+logger = logging.getLogger('bs')
 logger.setLevel(LOG_LEVEL)
 logger.addHandler(stream)
 

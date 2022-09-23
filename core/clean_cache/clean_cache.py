@@ -15,8 +15,12 @@ class CleanCache:
     return 'cleancache'
   
   
+  def version(self):
+    return '1.0.0'
+
+  
   def help(self):
-    return 'cg cleancache'
+    return 'bs cleancache'
 
 
   def description(self):
@@ -25,7 +29,7 @@ class CleanCache:
 
   def args_parser(self, parser):
     self.integrateParser = parser
-    self.integrateParser.add_argument("-q", 
+    self.integrateParser.add_argument('-s', '-silent', 
                                       action='store_true', 
                                       default=False, 
                                       help='Quite Mode')
