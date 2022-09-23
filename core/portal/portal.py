@@ -24,15 +24,6 @@ parser.add_argument('--verbose',
 subparser = parser.add_subparsers(title="目前支持的功能", dest="command")
 command_handler_map = {}
 
-def parse_args():
-  parser.add_argument("--verbose", 
-                      action="store_true", 
-                      default=False,
-                      help="详细输出")
-  
-  return parser.parse_args()
-
-
 def register_commands():
   for CommandClass in routines:
     cmd = CommandClass()
@@ -52,7 +43,7 @@ def register_commands():
 def main():
   register_commands()
   
-  args = parse_args()
+  args = parser.parse_args()
   if args.verbose:
     set_log_level(logging.DEBUG)
   
