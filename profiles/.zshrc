@@ -17,7 +17,6 @@ source $MY_ZSH/oh-my-zsh.sh
 ## Source
 
 [ -f ~/.bash_profile ] && source ~/.bash_profile
-[ -f ~/.zprofile ] && source ~/.zprofile
 
 
 ## Alias
