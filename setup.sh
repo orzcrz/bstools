@@ -22,7 +22,7 @@ function log() {
   local logtype=$1
   local msg=$2
   local datetime=$(date +'%F %H:%M:%S')
-  local logformat="[${logtype}] ${datetime} [${FUNCNAME[2]} - $(caller 0 | awk '{print$1}')] ${msg}"
+  local logformat="[${logtype}] ${datetime} - ${msg}"
   {
   case $logtype in
   DEBUG)
