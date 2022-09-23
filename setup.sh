@@ -276,12 +276,14 @@ rm -f ~/.zshrc
 rm -f ~/.zprofile
 rm -f ~/.lldbinit
 rm -rf ~/.pip
+rm -rf ~/.gitignore_global
 
 ## 软链当前配置
 ln -s $zshrc ~/.zshrc
 ln -s $zprofile ~/.zprofile
 ln -s ${profiles_path}/lldb/.lldbinit ~/.lldbinit
 ln -s ${profiles_path}/.pip ~/.pip
+ln -s ${profiles_path}/.gitignore_global ~/.gitignore_global
 
 setup_bstools
 setup_brew_if_needed
