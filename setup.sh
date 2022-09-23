@@ -126,35 +126,25 @@ function setup_brew_if_needed() {
   fi
 
   log_info "导入环境变量"    
-  local bottles_url=https://mirrors.ustc.edu.cn/homebrew-bottles
+  local bottles_url=https://mirrors.ustc.edu.cn/homebrew-bottles/bottles/
+  local repo_url=https://mirrors.ustc.edu.cn/brew.git
+  local core_url=https://mirrors.ustc.edu.cn/homebrew-core.git
+
   # local bottles_url=https://mirrors.aliyun.com/homebrew/homebrew-bottles
+  # local repo_url=https://mirrors.aliyun.com/homebrew/brew.git
+  # local core_url=https://mirrors.aliyun.com/homebrew/homebrew-core.git
+
   echo -e "\n## homebrew" >> $zprofile
   echo "export PATH=$brew_repo/bin:\$PATH" >> $zprofile
   echo "export PATH=$brew_repo/sbin:\$PATH" >> $zprofile
-  echo "HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
+  echo "export HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
+  echo "export HOMEBREW_BREW_GIT_REMOTE=$repo_url" >> $zprofile
+  echo "export HOMEBREW_CORE_GIT_REMOTE=$core_url" >> $zprofile
 
   cd ~
   source ~/.zprofile
   if command -v brew 1>/dev/null 2>&1; then
     log_info "安装成功"
-
-    log_info "替换 Homebrew 源地址"
-    local repo_url=https://mirrors.aliyun.com/homebrew/brew.git
-    local core_url=https://mirrors.aliyun.com/homebrew/homebrew-core.git
-    local cask_url=https://mirrors.ustc.edu.cn/homebrew-cask.git
-
-    # local repo_url=https://mirrors.ustc.edu.cn/brew.git
-    # local core_url=https://mirrors.ustc.edu.cn/homebrew-core.git
-
-    cd $brew_repo
-    git remote set-url origin $repo_url
-
-    local tap_dir=$brew_repo/Library/Taps/homebrew
-    cd "$tap_dir/homebrew-core"
-    git remote set-url origin $core_url
-    cd "$tap_dir/homebrew-cask"
-    git remote set-url origin $cask_url
-
   else
     log_error "安装失败"
     exit 1
