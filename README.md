@@ -13,6 +13,8 @@ curl https://raw.githubusercontent.com/orzcrz/bstools/master/setup.sh | bash
 ## 配置项
 
 - oh-my-zsh
+- dk_lldb
+- zlldb
 
 ### 工具包
 
