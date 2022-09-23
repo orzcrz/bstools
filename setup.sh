@@ -4,7 +4,6 @@
 # Copyright © 2022 BaldStudio. All rights reserved.
 
 set -e
-set -u
 set -o pipefail
 
 cd ~
@@ -65,8 +64,8 @@ function setup_bstools() {
 
   log_info "导入环境变量"
   local pattern="## bstools"
-  local env="export PATH=\$HOME/.bstools/bin:\$PATH"
-  local line="\n$pattern\n$env"
+  local env="export BSTOOLS_ROOT=\$HOME/.bstools\nexport PATH=\$BSTOOLS_ROOT/bin:\$PATH"
+  local line="$pattern\n$env"
   local files=(
     $zprofile
   )
@@ -107,33 +106,45 @@ function setup_bstools() {
 # arm版本的Mac上安装Homebrew
 function setup_brew_if_needed() {
   log_info "==> 尝试安装 Homebrew"
+  local brew_repo=/opt/homebrew
   if command -v brew 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
-    return
+  else
+    local cpu_brand=`sysctl -n machdep.cpu.brand_string`
+    local cpu_arch=`uname -m`
+    log_info "处理器信息： $cpu_brand | $cpu_arch"
+    if [[ "$cpu_brand" =~ "Apple" ]] && [[ "$cpu_arch" =~ "arm" ]]; then
+      log_info "安装 arm版 Homebrew"
+      local remote_url=https://github.com/Homebrew/brew/tarball/master
+      sudo mkdir -p $brew_repo
+      sudo chown -R $(whoami) $brew_repo
+      curl -L $remote_url | tar xz --strip 1 -C $brew_repo
+    else
+      log_error "非arm版的没适配，自己动手吧"
+      exit
+    fi
   fi
 
-  local cpu=`sysctl -n machdep.cpu.brand_string`
-  local cpu_arch=`uname -m`
-  log_info "处理器信息： $cpu，$cpu_arch"
-  if [[ $cpu =~ "Apple" ]] && [[ $cpu_arch =~ "arm" ]]; then
-    log_info "安装 arm版 Homebrew"
-    local brew_repo=/opt/homebrew
-    local remote_url=https://github.com/Homebrew/brew/tarball/master
-    sudo mkdir -p $brew_repo
-    sudo chown -R $(whoami) $brew_repo
-    curl -L $remote_url | tar xz --strip 1 -C $brew_repo
+  log_info "导入环境变量"    
+  local bottles_url=https://mirrors.ustc.edu.cn/homebrew-bottles
+  # local bottles_url=https://mirrors.aliyun.com/homebrew/homebrew-bottles
+  echo -e "\n## homebrew" >> $zprofile
+  echo "export PATH=$brew_repo/bin:\$PATH" >> $zprofile
+  echo "export PATH=$brew_repo/sbin:\$PATH" >> $zprofile
+  echo "HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
 
-    log_info "导入环境变量"    
-    local bottles_url=https://mirrors.ustc.edu.cn/homebrew-bottles
-    echo -e "\n## homebrew" >> $zprofile
-    echo "export PATH=$brew_repo/bin:\$PATH" >> $zprofile
-    echo "export PATH=$brew_repo/sbin:\$PATH" >> $zprofile
-    echo "HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
+  cd ~
+  source ~/.zprofile
+  if command -v brew 1>/dev/null 2>&1; then
+    log_info "安装成功"
 
     log_info "替换 Homebrew 源地址"
-    local repo_url=https://mirrors.ustc.edu.cn/brew.git
-    local core_url=https://mirrors.ustc.edu.cn/homebrew-core.git
+    local repo_url=https://mirrors.aliyun.com/homebrew/brew.git
+    local core_url=https://mirrors.aliyun.com/homebrew/homebrew-core.git
     local cask_url=https://mirrors.ustc.edu.cn/homebrew-cask.git
+
+    # local repo_url=https://mirrors.ustc.edu.cn/brew.git
+    # local core_url=https://mirrors.ustc.edu.cn/homebrew-core.git
 
     cd $brew_repo
     git remote set-url origin $repo_url
@@ -144,16 +155,8 @@ function setup_brew_if_needed() {
     cd "$tap_dir/homebrew-cask"
     git remote set-url origin $cask_url
 
-    cd ~
-    source ~/.zprofile
-    if command -v brew 1>/dev/null 2>&1; then
-      log_info "安装成功"
-    else
-      log_error "安装失败"
-      exit 1
-    fi
   else
-    log_error "非arm版的没适配，自己动手吧"
+    log_error "安装失败"
     exit 1
   fi
 }
@@ -161,21 +164,20 @@ function setup_brew_if_needed() {
 ## pyenv
 function setup_pyenv() {
   log_info "==> 尝试安装 pyenv"
-  if command -v bs 1>/dev/null 2>&1; then
+  if command -v pyenv 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
-    return
+  else
+    brew install pyenv pyenv-virtualenv && log_info "已安装 pyenv"
   fi
-
-  brew install pyenv pyenv-virtualenv && log_info "已安装 pyenv"
 
   log_info "导入环境变量"
   echo -e "\n## pyenv" >> $zprofile
   echo 'export PYENV_ROOT=$HOME/.pyenv' >> $zprofile
   echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> $zprofile
-  echo 'if command -v pyenv 1>/dev/null 2>&1; then'
+  echo 'if command -v pyenv 1>/dev/null 2>&1; then' >> $zprofile
   echo '  eval "$(pyenv init -)"' >> $zprofile
   echo '  eval "$(pyenv virtualenv-init -)"' >> $zprofile
-  echo 'fi'
+  echo 'fi' >> $zprofile
 
   log_info "pip源已在$HOME/.pip中配置"
 
@@ -186,9 +188,6 @@ function setup_pyenv() {
     log_error "安装失败"
     exit 1
   fi
-
-  log_info "将全局python切到3.9.5"
-  pyenv global 3.9.5
 }
 
 ## wget
@@ -237,19 +236,18 @@ function setup_rbenv() {
   log_info "==> 尝试安装 rbenv"
   if command -v rbenv 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
-    return
+  else
+    brew install rbenv ruby-build rbenv-vars && log_info "已安装 rbenv"
   fi
-
-  brew install rbenv ruby-build rbenv-vars && log_info "已安装 rbenv"
 
   log_info "导入环境变量"
   local mirror_url=https://cache.ruby-china.com
   echo -e "\n## rbenv" >> $zprofile
   echo 'export PATH=$HOME/.rbenv/bin:$PATH' >> $zprofile
   echo "export RUBY_BUILD_MIRROR_URL=$mirror_url" >> $zprofile
-  echo 'if command -v rbenv 1>/dev/null 2>&1; then'
+  echo 'if command -v rbenv 1>/dev/null 2>&1; then' >> $zprofile
   echo '  eval "$(rbenv init -)"' >> $zprofile
-  echo 'fi'
+  echo 'fi' >> $zprofile
 
   source ~/.zprofile
   if command -v rbenv 1>/dev/null 2>&1; then
@@ -265,11 +263,10 @@ function setup_cocoapods() {
   log_info "==> 尝试安装 cocoapods"
   if command -v pod 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
-    return
+  else
+    log_info "安装路径为：$HOME/.gem/"
+    gem install cocoapods --user && log_info "已安装 cocoapods"
   fi
-
-  log_info "安装路径为：$HOME/.gem/"
-  gem install cocoapods --user && log_info "已安装 cocoapods"
 
   log_info "导入环境变量"
   local install_dir=`gem env | grep "USER INSTALLATION DIRECTORY" | awk -F":" '{ print  $2 }' | tr -d '[:space:]'`

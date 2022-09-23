@@ -10,7 +10,7 @@ plugins=(git)
 
 ## oh-my-zsh
 
-export MY_ZSH=./oh-my-zsh
+export MY_ZSH=$BSTOOLS_ROOT/profiles/oh-my-zsh
 source $MY_ZSH/oh-my-zsh.sh
 
 
