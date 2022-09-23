@@ -293,19 +293,11 @@ echo "################################"
 echo "$(tput sgr0)"
 
 log_warning "即将删除以下配置，请确认是否需要备份"
-echo "~/.zshrc"
-echo "~/.zprofile"
-echo "~/.lldbinit"
-echo "~/.pip"
-
-while true; do
-  read -p "确认继续执行? (y/n) " yn
-  case $yn in
-    [Yy]* ) break;;
-    [Nn]* ) exit;;
-    * ) echo "Please answer Yy or Nn.";;
-  esac
-done
+log_debug "~/.zshrc"
+log_debug "~/.zprofile"
+log_debug "~/.lldbinit"
+log_debug "~/.pip"
+log_debug "~/.gitignore_global"
 
 ## 删除已有配置
 rm -f ~/.zshrc
