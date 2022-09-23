@@ -71,7 +71,7 @@ curl https://raw.githubusercontent.com/orzcrz/bstools/master/setup.sh | bash
     <tr>
       <td align="left">🐛</td>
       <td align="left"><code>:bug:</code></td>
-      <td align="left">修复 bug</td>
+      <td align="left">修复 BUG</td>
     </tr>
     <tr>
       <td align="left">🚑️</td>
