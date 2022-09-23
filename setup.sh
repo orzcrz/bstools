@@ -57,9 +57,9 @@ function log_error() {
 function setup_bstools() {
   log_info "==> 尝试安装 bstools"
 
-  rm -rf $root_path
+  rm -rf $root_dir
   local tools_url=git@github.com:orzcrz/bstools.git
-  git clone --recurse-submodules $tools_url $root_path
+  git clone --recurse-submodules $tools_url $root_dir
   log_info "已下载最新版本到本地"
 
   log_info "导入环境变量"
@@ -293,18 +293,18 @@ echo "################################"
 echo "$(tput sgr0)"
 
 log_warning "即将删除以下配置，请确认是否需要备份"
-log_debug "~/.zshrc"
-log_debug "~/.zprofile"
-log_debug "~/.lldbinit"
-log_debug "~/.pip"
-log_debug "~/.gitignore_global"
+log_warning "rm -f ~/.zshrc"
+log_warning "rm -f ~/.zprofile"
+log_warning "rm -f ~/.lldbinit"
+log_warning "rm -rf ~/.pip"
+log_warning "rm -f ~/.gitignore_global"
 
 ## 删除已有配置
 rm -f ~/.zshrc
 rm -f ~/.zprofile
 rm -f ~/.lldbinit
 rm -rf ~/.pip
-rm -rf ~/.gitignore_global
+rm -f ~/.gitignore_global
 
 ## 软链当前配置
 ln -s $zshrc ~/.zshrc
