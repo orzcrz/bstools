@@ -58,7 +58,7 @@ function setup_bstools() {
 
   rm -rf $root_dir
   local tools_url=git@github.com:orzcrz/bstools.git
-  git clone --recurse-submodules $tools_url $root_dir
+  git clone --depth 1 --recurse-submodules $tools_url $root_dir
   log_info "已下载最新版本到本地"
 
   log_info "导入环境变量"
@@ -98,6 +98,8 @@ function setup_bstools() {
     log_error "安装失败"
     exit 1
   fi
+  
+  rm -rf $root_dir/.git
 
   cd ~
 }
