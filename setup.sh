@@ -15,8 +15,7 @@ zshrc=$profiles_path/.zshrc
 zprofile=$profiles_path/.zprofile
 lldbinit=$profiles_path/lldb/.lldbinit
 
-## log
-
+# logger
 loglevel=0
 function log() {
   local logtype=$1
@@ -278,7 +277,7 @@ function setup_cocoapods() {
 # https://github.com/facebook/chisel
 function setup_lldb_chisel() {
   brew install chisel && log_info "已安装 chisel"
-  echo -e "\n## chisel"
+  echo -e "\n## chisel" >> $lldbinit
   echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $lldbinit
 }
 
