@@ -12,7 +12,7 @@ import argparse
 import time
 
 from core.logger import logger, set_log_level
-from .routines import routines
+from core.routines import routines
 
 parser = argparse.ArgumentParser(prog='bs',
                                  description="命令行工具箱",
