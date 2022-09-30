@@ -19,20 +19,7 @@ XC_ENVIRON = os.environ.copy()
 XC_ENVIRON['DEVELOPER_DIR'] = DEVELOPER_DIR
 
 class SymbolParser:
-        
-  def _parse_crash(self, file, output):  
-    cmd = [ os.path.join(TOOL_DIR, 'symbolicatecrash'), file ]
-    logger.debug('Running: %r', cmd)
-    logger.debug('Output File: %s', output)
-    subprocess.check_call(cmd, stdout=open(output,'w'), env=XC_ENVIRON)
-  
-  
-  def _get_uuid(self, file):
-    cmd = ['dwarfdump', '-u', file]
-    logger.debug('Running: %r', cmd)
-    subprocess.check_call(cmd)
-  
-  
+    
   def name(self):
     return 'symbol'
 
@@ -75,3 +62,16 @@ class SymbolParser:
     if args.uuid:
       self._get_uuid(args.uuid)
       return 0
+    
+          
+  def _parse_crash(self, file, output):  
+    cmd = [ os.path.join(TOOL_DIR, 'symbolicatecrash'), file ]
+    logger.debug('Running: %r', cmd)
+    logger.debug('Output File: %s', output)
+    subprocess.check_call(cmd, stdout=open(output,'w'), env=XC_ENVIRON)
+  
+  
+  def _get_uuid(self, file):
+    cmd = ['dwarfdump', '-u', file]
+    logger.debug('Running: %r', cmd)
+    subprocess.check_call(cmd)

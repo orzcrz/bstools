@@ -31,6 +31,7 @@ parser.add_argument('--update',
 subparser = parser.add_subparsers(title="目前支持的功能", dest="command")
 command_handler_map = {}
   
+  
 def register_commands():
   for CommandClass in routines:
     cmd = CommandClass()
@@ -38,27 +39,30 @@ def register_commands():
                                            help=cmd.help(), 
                                            description=cmd.description(),
                                            epilog='当前版本: %s' % cmd.version())
-    cmd.args_parser(cmd_args_parser)
     cmd_args_parser.add_argument('--verbose', 
                                  action='store_true', 
                                  default=False, 
                                  help="详细输出")
 
+    cmd.args_parser(cmd_args_parser)
     command_handler_map[cmd.name()] = cmd;
 
 
 def handle_command(args):
+  logger.info(args)
   command_handler = command_handler_map.get(args.command)
   if command_handler == None:
     parser.print_help()
   else:
-    begin_time = time.time()
+    begin_time_ms = time.time() * 1000
     command_handler.handle_command(args)
-    cost = time.time() - begin_time
-    logger.debug("TOTAL COST: {}".format(cost))
+    cost = time.time() * 1000 - begin_time_ms
+    logger.debug("TOTAL COST: {:.4f} ms".format(cost))
 
 
-def main():
+def main():  
+  register_commands()    
+  
   # 调整日志输出级别
   args = parser.parse_args()
   if args.verbose:
@@ -69,7 +73,6 @@ def main():
     update_tool()
     return
 
-  register_commands()    
   handle_command(args)
 
 
