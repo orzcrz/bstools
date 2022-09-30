@@ -6,9 +6,7 @@ Created by crzorz on 2022/09/27
 Copyright © 2022 BaldStudio. All rights reserved.
 """
 
-from ast import arg
 import os
-import sys
 import subprocess
 
 from core.logger import logger

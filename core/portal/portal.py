@@ -13,6 +13,7 @@ import time
 
 from core.logger import logger, set_log_level
 from core.routines import routines
+from .update import update_tool
 
 parser = argparse.ArgumentParser(prog='bs',
                                  description="命令行工具箱",
@@ -21,9 +22,15 @@ parser.add_argument('--verbose',
                     action='store_true', 
                     default=False, 
                     help="详细输出")
+
+parser.add_argument('--update', 
+                    action='store_true', 
+                    default=False,
+                    help="更新到最新版本")
+
 subparser = parser.add_subparsers(title="目前支持的功能", dest="command")
 command_handler_map = {}
-
+  
 def register_commands():
   for CommandClass in routines:
     cmd = CommandClass()
@@ -40,13 +47,7 @@ def register_commands():
     command_handler_map[cmd.name()] = cmd;
 
 
-def main():
-  register_commands()
-  
-  args = parser.parse_args()
-  if args.verbose:
-    set_log_level(logging.DEBUG)
-  
+def handle_command(args):
   command_handler = command_handler_map.get(args.command)
   if command_handler == None:
     parser.print_help()
@@ -55,6 +56,21 @@ def main():
     command_handler.handle_command(args)
     cost = time.time() - begin_time
     logger.debug("TOTAL COST: {}".format(cost))
+
+
+def main():
+  # 调整日志输出级别
+  args = parser.parse_args()
+  if args.verbose:
+    set_log_level(logging.DEBUG)
+
+  # 更新工具
+  if args.update:
+    update_tool()
+    return
+
+  register_commands()    
+  handle_command(args)
 
 
 if __name__ == '__main__':
