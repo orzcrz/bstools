@@ -23,7 +23,10 @@ def update_tool():
   subprocess.check_call(cmd)
     
   tool_root_dir = os.path.join(os.path.expanduser('~'), '.bstools')
-  excludes = ['.git', '.lldbinit', '.zprofile', '.zshrc', '.gitmodules',]
+  excludes = [
+    '.git', '.lldbinit', '.zprofile', '.zshrc', '.gitmodules', 
+    '__pycache__',
+  ]
   for root, dirs, files in os.walk(clone_dir):
     if os.path.basename(root) in excludes:
       logger.debug('忽略 %s' % root)
