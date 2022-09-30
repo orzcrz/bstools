@@ -16,6 +16,8 @@ from core import GIT
 from core.logger import logger
 
 def update_tool():
+  logger.info('开始更新 ✊✊✊')
+  
   repo_url = "git@github.com:orzcrz/bstools.git"
   clone_dir = tempfile.mkdtemp()
   cmd = [GIT, 'clone', '--depth', '1', '--recurse-submodules', repo_url, clone_dir]
@@ -44,3 +46,5 @@ def update_tool():
       target_path = os.path.join(tool_root_dir + suffix, file)
       shutil.copyfile(file_path, target_path)
       logger.debug('替换 %s' % target_path)
+      
+  logger.info('更新完成 👏👏👏')
