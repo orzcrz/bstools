@@ -13,7 +13,7 @@ entry=$(dirname "${BASH_SOURCE}")
 venv_path="$entry/../venv"
 
 # 检查 venv路径
-if [[ ! -d "$venv_path" ]];then
+if [[ ! -d "$venv_path" ]]; then
   echo "python 环境不对"
 fi
 

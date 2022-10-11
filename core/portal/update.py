@@ -12,10 +12,11 @@ import tempfile
 import subprocess
 from turtle import clone
 
-from core import GIT
+from core import GIT, VERSION
 from core.logger import logger
 
 def update_tool():
+  
   logger.info('开始更新 ✊✊✊')
   
   repo_url = "git@github.com:orzcrz/bstools.git"
@@ -26,9 +27,9 @@ def update_tool():
     
   tool_root_dir = os.path.join(os.path.expanduser('~'), '.bstools')
   excludes = [
-    '.git', '.lldbinit', '.zprofile', '.zshrc', '.gitmodules', 
-    '__pycache__',
+    '.lldbinit', '.zprofile', '.zshrc', '__pycache__',
   ]
+  
   for root, dirs, files in os.walk(clone_dir):
     if os.path.basename(root) in excludes:
       logger.debug('忽略 %s' % root)

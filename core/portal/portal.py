@@ -11,17 +11,22 @@ import logging
 import argparse
 import time
 
+from core import VERSION
 from core.logger import logger, set_log_level
 from core.routines import routines
 from .update import update_tool
 
 parser = argparse.ArgumentParser(prog='bs',
                                  description="命令行工具箱",
-                                 epilog='工具箱版本 1.0.0')
+                                 epilog='工具箱版本 %s' % VERSION)
 parser.add_argument('--verbose', 
                     action='store_true', 
                     default=False, 
                     help="详细输出")
+
+parser.add_argument("--version", 
+                    action="version", 
+                    version=VERSION)
 
 parser.add_argument('--update', 
                     action='store_true', 
