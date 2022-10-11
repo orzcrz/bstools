@@ -41,7 +41,7 @@ def update_tool(is_force_update):
                repo_url, clone_dir ]
   run_command(clone_cmd)
     
-  tool_root_dir = os.path.join(os.path.expanduser('~'), '.bstools')
+  tool_root_dir = os.path.expanduser('~/.bstools')
   excludes = [
     '.git', '.gitmodules', '.gitignore', '.gitignore_global', '.github',
     '.lldbinit', '.zprofile', '.zshrc', '.vscode', '__pycache__',

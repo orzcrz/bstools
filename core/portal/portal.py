@@ -59,7 +59,7 @@ def register_commands():
 
 
 def handle_command(args):
-  logger.info(args)
+  logger.debug(args)
   command_handler = command_handler_map.get(args.command)
   if command_handler == None:
     parser.print_help()
