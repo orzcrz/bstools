@@ -19,14 +19,15 @@ from .update import update_tool
 parser = argparse.ArgumentParser(prog='bs',
                                  description="命令行工具箱",
                                  epilog='工具箱版本 %s' % VERSION)
+
+parser.add_argument('-v', '--version', 
+                    action="version", 
+                    version=VERSION)
+
 parser.add_argument('--verbose', 
                     action='store_true', 
                     default=False, 
                     help="详细输出")
-
-parser.add_argument("--version", 
-                    action="version", 
-                    version=VERSION)
 
 parser.add_argument('--update', 
                     action='store_true', 
