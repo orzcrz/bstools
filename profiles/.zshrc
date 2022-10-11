@@ -10,6 +10,9 @@ plugins=(git)
 
 ## oh-my-zsh
 
+### 关闭oh-my-zsh自动更新
+export DISABLE_AUTO_UPDATE=true
+
 export MY_ZSH=$BSTOOLS_ROOT/profiles/oh-my-zsh
 source $MY_ZSH/oh-my-zsh.sh
 

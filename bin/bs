@@ -9,13 +9,17 @@ set -o pipefail
 
 entry=$(dirname "${BASH_SOURCE}")
 
-# check virtual env
-venv_path="$entry/../venv"
+function activate_venv() {
+  # check virtual env
+  venv_path="$entry/../venv"
 
-# 检查 venv路径
-if [[ ! -d "$venv_path" ]]; then
-  echo "python 环境不对"
-fi
+  # 检查 venv 路径
+  if [[ ! -d "$venv_path" ]]; then
+    echo "python 环境不对"
+  fi
 
-source $venv_path/bin/activate
+  source $venv_path/bin/activate
+}
+
+activate_venv
 python "${entry}/bs.py" "$@"
