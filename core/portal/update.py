@@ -28,8 +28,8 @@ def is_need_udpate():
   remote_version = remote_version_file.read().decode('utf8')
   return StrictVersion(remote_version) > StrictVersion(VERSION)
 
-def update_tool():
-  if not is_need_udpate():
+def update_tool(is_force_update):
+  if not is_need_udpate() and not is_force_update:
     logger.info('已经是最新版本了!')
     return
   

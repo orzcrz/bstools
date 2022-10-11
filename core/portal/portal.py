@@ -33,6 +33,11 @@ parser.add_argument('--update',
                     default=False,
                     help="更新到最新版本")
 
+parser.add_argument('--update-force', 
+                    action='store_true', 
+                    default=False,
+                    help="强制更新到最新版本")
+
 subparser = parser.add_subparsers(title="目前支持的功能", dest="command")
 command_handler_map = {}
   
@@ -74,8 +79,8 @@ def main():
     set_log_level(logging.DEBUG)
 
   # 更新工具
-  if args.update:
-    update_tool()
+  if args.update or args.update_force:
+    update_tool(args.update_force)
     return
 
   handle_command(args)
