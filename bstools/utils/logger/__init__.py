@@ -13,7 +13,6 @@ from colorlog import ColoredFormatter
 LOG_LEVEL = logging.INFO
 LOGFORMAT = "%(log_color)s%(levelname)s%(reset)s: %(log_color)s%(message)s%(reset)s"
 
-
 logging.root.setLevel(LOG_LEVEL)
 formatter = ColoredFormatter(LOGFORMAT)
 
@@ -25,7 +24,7 @@ logger = logging.getLogger('bs')
 logger.setLevel(LOG_LEVEL)
 logger.addHandler(stream)
 
-def set_log_level(level):
+def set_logger_level(level):
     logging.root.setLevel(level)
     stream.setLevel(level)
     logger.setLevel(level)

@@ -11,10 +11,10 @@ import logging
 import argparse
 import time
 
-from core import VERSION
-from core.logger import logger, set_log_level
-from core.routines import routines
-from .update import update_tool
+from bstools import VERSION
+from bstools.utils.logger import logger, set_logger_level
+from bstools.registry import plugins
+from bstools.update import update_if_needed
 
 parser = argparse.ArgumentParser(prog='bs',
                                  description="命令行工具箱",
@@ -44,8 +44,8 @@ command_handler_map = {}
   
   
 def register_commands():
-  for CommandClass in routines:
-    cmd = CommandClass()
+  for CommandPlugin in plugins:
+    cmd = CommandPlugin()
     cmd_args_parser = subparser.add_parser(cmd.name(), 
                                            help=cmd.help(), 
                                            description=cmd.description(),
@@ -77,11 +77,11 @@ def main():
   # 调整日志输出级别
   args = parser.parse_args()
   if args.verbose:
-    set_log_level(logging.DEBUG)
+    set_logger_level(logging.DEBUG)
 
   # 更新工具
   if args.update or args.update_force:
-    update_tool(args.update_force)
+    update_if_needed(args.update_force)
     return
 
   handle_command(args)

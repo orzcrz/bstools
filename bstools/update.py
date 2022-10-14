@@ -14,8 +14,8 @@ import subprocess
 from urllib import request
 from distutils.version import StrictVersion
 
-from core import GIT, VERSION
-from core.logger import logger
+from bstools import GIT, VERSION
+from bstools.utils.logger import logger
 
 def run_command(cmd):
   logger.debug('Running: %r', cmd)
@@ -28,8 +28,8 @@ def is_need_udpate():
   remote_version = remote_version_file.read().decode('utf8')
   return StrictVersion(remote_version) > StrictVersion(VERSION)
 
-def update_tool(is_force_update):
-  if not is_need_udpate() and not is_force_update:
+def update_if_needed(is_force):
+  if not is_need_udpate() and not is_force:
     logger.info('已经是最新版本了!')
     return
   

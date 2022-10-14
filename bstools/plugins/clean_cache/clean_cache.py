@@ -8,10 +8,9 @@ Copyright © 2022 BaldStudio. All rights reserved.
 
 import os
 import shutil
-import sys
 import subprocess
 
-from core.logger import logger
+from bstools.utils.logger import logger
 
 class CleanCache:  
   
