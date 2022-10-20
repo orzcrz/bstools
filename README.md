@@ -33,6 +33,10 @@ curl https://raw.githubusercontent.com/orzcrz/bstools/master/setup.sh | bash
 - ~/.lldbinit
 - ~/.pip
 
+### App
+
+- VSCode
+
 ## 附加项
 
 ### 关于git的提交附带表情

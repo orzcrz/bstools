@@ -110,6 +110,7 @@ function setup_brew_if_needed() {
   local brew_repo=/opt/homebrew
   if command -v brew 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
   else
     local cpu_brand=`sysctl -n machdep.cpu.brand_string`
     local cpu_arch=`uname -m`
@@ -157,6 +158,7 @@ function setup_pyenv() {
   log_info "==> 尝试安装 pyenv"
   if command -v pyenv 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
   else
     brew install pyenv pyenv-virtualenv && log_info "已安装 pyenv"
   fi
@@ -217,19 +219,20 @@ function setup_tree() {
 
 ## rbenv
 function setup_rbenv() {
+  log_info "==> 尝试安装 rbenv"
+  if command -v rbenv 1>/dev/null 2>&1; then
+    log_info "已存在，跳过安装"
+    return
+  else
+    brew install rbenv ruby-build rbenv-vars && log_info "已安装 rbenv"
+  fi
+
   log_info "==> 尝试将Ruby换成国内源"
   gem sources | grep 'http' | while read line; do
     gem source -r $line
   done
   gem source -a https://gems.ruby-china.com/
   log_info "当前Ruby源为：https://gems.ruby-china.com/"
-
-  log_info "==> 尝试安装 rbenv"
-  if command -v rbenv 1>/dev/null 2>&1; then
-    log_info "已存在，跳过安装"
-  else
-    brew install rbenv ruby-build rbenv-vars && log_info "已安装 rbenv"
-  fi
 
   log_info "导入环境变量"
   local mirror_url=https://cache.ruby-china.com
@@ -254,6 +257,7 @@ function setup_cocoapods() {
   log_info "==> 尝试安装 cocoapods"
   if command -v pod 1>/dev/null 2>&1; then
     log_info "已存在，跳过安装"
+    return
   else
     log_info "安装路径为：$HOME/.gem/"
     gem install cocoapods --user && log_info "已安装 cocoapods"
@@ -319,6 +323,10 @@ setup_tree
 setup_rbenv
 setup_cocoapods
 setup_lldb_chisel
+
+brew tap homebrew/cask
+# 安装vscode
+brew install --cask visual-studio-code
 
 echo "$(tput setaf 2)"
 echo "################################"
