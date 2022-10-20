@@ -2,5 +2,6 @@
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "editor.detectIndentation": false,
-  "editor.tabSize": 2
+  "editor.tabSize": 2,
+  "explorer.excludeGitIgnore": true
 }

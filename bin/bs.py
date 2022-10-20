@@ -9,13 +9,12 @@ Copyright © 2022 BaldStudio. All rights reserved.
 import os
 import sys
 
-BIN_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(BIN_DIR, '..'))
+sys.path.append(os.environ['BSTOOLS_ROOT'])
 
-from bstools import VERSION
+from bstools import VERSION, BSTOOLS_ROOT
 from bstools.portal import main
 
-version_file = os.path.join(BIN_DIR, '..', 'version')
+version_file = os.path.join(BSTOOLS_ROOT, 'version')
 if not os.path.exists(version_file):
   with open(version_file, 'w', encoding='utf-8') as f:
     f.write(VERSION)
