@@ -9,10 +9,11 @@ Copyright © 2022 BaldStudio. All rights reserved.
 import os
 import sys
 
-sys.path.append(os.environ['BSTOOLS_ROOT'])
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 from bstools import VERSION, BSTOOLS_ROOT
 from bstools.portal import main
+
 
 version_file = os.path.join(BSTOOLS_ROOT, 'version')
 if not os.path.exists(version_file):

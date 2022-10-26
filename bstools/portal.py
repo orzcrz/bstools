@@ -7,12 +7,11 @@ Copyright © 2022 BaldStudio. All rights reserved.
 """
 
 import sys
-import logging
 import argparse
 import time
 
 from bstools import VERSION
-from bstools.utils.logger import logger, set_logger_level
+from bstools.utils.bs_log import logger, LogLevel
 from bstools.registry import plugins
 from bstools.update import update_if_needed
 
@@ -77,7 +76,7 @@ def main():
   # 调整日志输出级别
   args = parser.parse_args()
   if args.verbose:
-    set_logger_level(logging.DEBUG)
+    logger.set_level(LogLevel.DEBUG)
 
   # 更新工具
   if args.update or args.update_force:

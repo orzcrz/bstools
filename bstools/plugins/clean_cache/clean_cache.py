@@ -10,7 +10,8 @@ import os
 import shutil
 import subprocess
 
-from bstools.utils.logger import logger
+from bstools.utils.bs_log import logger
+
 
 class CleanCache:  
   

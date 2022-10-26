@@ -9,7 +9,7 @@ Copyright © 2022 BaldStudio. All rights reserved.
 import os
 import subprocess
 
-from bstools.utils.logger import logger
+from bstools.utils.bs_log import logger
 
 XCODE_CONTENT_DIR = "/Applications/Xcode.app/Contents"
 DEVELOPER_DIR = os.path.join(XCODE_CONTENT_DIR, 'Developer')

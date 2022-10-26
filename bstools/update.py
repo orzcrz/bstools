@@ -15,7 +15,8 @@ from urllib import request
 from distutils.version import StrictVersion
 
 from bstools import GIT, VERSION
-from bstools.utils.logger import logger
+from bstools.utils.bs_log import logger
+
 
 def run_command(cmd):
   logger.debug('Running: %r', cmd)
