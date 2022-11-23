@@ -49,20 +49,22 @@ class SymbolParser:
 
   def handle_command(self, args):
     self.args = args
-    
-    # 重新符号化.crash文件
+
+    # 输出dSYM文件的UUID
+    if args.uuid:
+      self._get_uuid(args.uuid)
+      return
+
     if args.parse:
+      # 重新符号化.crash文件
       output = args.output
       if not output:
         output = os.path.join(args.parse, '..', 'output.crash')
       self._parse_crash(args.parse, output)
-      return 0
+      return
     
-    # 输出dSYM文件的UUID
-    if args.uuid:
-      self._get_uuid(args.uuid)
-      return 0
-    
+    self.integrateParser.print_help()
+
           
   def _parse_crash(self, file, output):  
     cmd = [ os.path.join(TOOL_DIR, 'symbolicatecrash'), file ]
