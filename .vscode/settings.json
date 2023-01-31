@@ -2,6 +2,7 @@
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "editor.detectIndentation": false,
-  "editor.tabSize": 2,
-  "explorer.excludeGitIgnore": true
+  "editor.tabSize": 4,
+  "explorer.excludeGitIgnore": true,
+  "editor.fontSize": 14
 }

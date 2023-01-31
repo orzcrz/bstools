@@ -6,10 +6,10 @@ Created by crzorz on 2022/09/15
 Copyright © 2022 BaldStudio. All rights reserved.
 """
 
-from bstools.plugins.clean_cache import CleanCache
+from bstools.plugins.clean_mac import CleanMac
 from bstools.plugins.symbol_parser import SymbolParser
 
-plugins = [
-  CleanCache,
-  SymbolParser,
+PLUGINS = [
+	CleanMac,
+	SymbolParser,
 ]

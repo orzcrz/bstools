@@ -12,13 +12,13 @@ VERSION = '1.0.0'
 
 GIT = '/usr/bin/git'
 
-BSTOOLS_ROOT = os.environ['BSTOOLS_ROOT']
+ROOT_DIR = os.environ['BSTOOLS_ROOT']
 
-BSTOOLS_SRC = os.path.join(BSTOOLS_ROOT, 'bstools')
-os.environ['BSTOOLS_SRC'] = BSTOOLS_SRC
+SRC_DIR = os.path.join(ROOT_DIR, 'bstools')
+os.environ['BSTOOLS_SRC'] = SRC_DIR
 
-BSTOOLS_BIN = os.path.join(BSTOOLS_ROOT, 'bin')
-os.environ['BSTOOLS_BIN'] = BSTOOLS_BIN
+BIN_DIR = os.path.join(ROOT_DIR, 'bin')
+os.environ['BSTOOLS_BIN'] = BIN_DIR
 
-BSTOOLS_MISC = os.path.join(BSTOOLS_ROOT, 'misc')
-os.environ['BSTOOLS_MISC'] = BSTOOLS_MISC
+MISC_DIR = os.path.join(ROOT_DIR, 'misc')
+os.environ['BSTOOLS_MISC'] = MISC_DIR
