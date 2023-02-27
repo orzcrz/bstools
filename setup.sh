@@ -142,6 +142,7 @@ function setup_brew_if_needed() {
   echo "export HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
   echo "export HOMEBREW_BREW_GIT_REMOTE=$repo_url" >> $zprofile
   echo "export HOMEBREW_CORE_GIT_REMOTE=$core_url" >> $zprofile
+  echo "export HOMEBREW_NO_INSTALL_FROM_API=1" >> $zprofile
 
   cd ~
   source ~/.zprofile
