@@ -5,7 +5,10 @@ ZSH_THEME="ys"
 
 ## Plugins
 
-plugins=(git)
+plugins=(
+  git, 
+  zsh-syntax-highlighting
+)
 
 
 ## oh-my-zsh
@@ -24,3 +27,7 @@ source $MY_ZSH/oh-my-zsh.sh
 
 ## Alias
 alias vscode="/Applications/Visual\ Studio\ Code.app/Contents/Resources/app/bin/code"
+
+
+## zsh语法高亮
+[ -f $BSTOOLS_ROOT/profiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ] && source $BSTOOLS_ROOT/profiles/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
