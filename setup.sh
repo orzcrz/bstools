@@ -294,26 +294,19 @@ echo "  准备配置环境"
 echo "################################"
 echo "$(tput sgr0)"
 
-log_warning "即将删除以下配置"
-log_warning "rm -f ~/.zshrc"
-log_warning "rm -f ~/.zprofile"
-log_warning "rm -f ~/.lldbinit"
-log_warning "rm -rf ~/.pip"
-log_warning "rm -f ~/.gitignore_global"
-
-## 删除已有配置
-rm -f ~/.zshrc
-rm -f ~/.zprofile
-rm -f ~/.lldbinit
-rm -rf ~/.pip
-rm -f ~/.gitignore_global
+log_warning "更新除以下配置"
+log_warning "~/.zshrc"
+log_warning "~/.zprofile"
+log_warning "~/.lldbinit"
+log_warning "~/.pip"
+log_warning "~/.gitignore_global"
 
 ## 软链当前配置
-ln -s $zshrc ~/.zshrc
-ln -s $zprofile ~/.zprofile
-ln -s $lldbinit ~/.lldbinit
-ln -s ${profiles_path}/.pip ~/.pip
-ln -s ${profiles_path}/.gitignore_global ~/.gitignore_global
+ln -sf $zshrc ~/.zshrc
+ln -sf $zprofile ~/.zprofile
+ln -sf $lldbinit ~/.lldbinit
+ln -sf ${profiles_path}/.pip ~/.pip
+ln -sf ${profiles_path}/.gitignore_global ~/.gitignore_global
 
 setup_bstools
 setup_brew_if_needed
