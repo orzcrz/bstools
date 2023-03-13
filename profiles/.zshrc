@@ -6,7 +6,8 @@ ZSH_THEME="ys"
 ## Plugins
 
 plugins=(
-  git, 
+  git
+  zsh-autosuggestions
   zsh-syntax-highlighting
 )
 

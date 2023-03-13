@@ -4,6 +4,9 @@
 [submodule "profiles/zsh-syntax-highlighting"]
 	path = profiles/zsh-syntax-highlighting
 	url = git@github.com:zsh-users/zsh-syntax-highlighting.git
+[submodule "profiles/zsh-autosuggestions"]
+	path = profiles/zsh-autosuggestions
+	url = git@github.com:zsh-users/zsh-autosuggestions.git
 [submodule "profiles/lldb/zlldb"]
 	path = profiles/lldb/zlldb
 	url = git@github.com:everettjf/zlldb.git
