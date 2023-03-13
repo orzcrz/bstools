@@ -23,7 +23,8 @@ class LogLevel:
     NOTSET = logging.NOTSET
 
 
-LOG_FORMAT = ColoredFormatter("%(log_color)s%(levelname)s%(reset)s: %(log_color)s%(message)s%(reset)s")
+LOG_FORMAT = ColoredFormatter(
+    '%(log_color)s[%(levelname)s]:[%(asctime)s] %(message)s%(reset)s')
 stream = logging.StreamHandler()
 stream.setFormatter(LOG_FORMAT)
 
