@@ -18,8 +18,3 @@ def copytree(src, dst, symlinks=False, ignore=None):
 			shutil.copytree(s, d, symlinks, ignore)
 		else:
 			shutil.copy2(s, d)
-
-
-def mkdir(path):
-	if not os.path.exists(path):
-		os.makedirs(path)

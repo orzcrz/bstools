@@ -32,6 +32,8 @@ curl https://raw.githubusercontent.com/orzcrz/bstools/master/setup.sh | bash
 - ~/.zsh_profile
 - ~/.lldbinit
 - ~/.pip
+- ~/.gitignore_global
+- ~/.hyper.js
 
 ### App
 
