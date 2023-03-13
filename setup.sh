@@ -294,12 +294,13 @@ echo "  准备配置环境"
 echo "################################"
 echo "$(tput sgr0)"
 
-log_warning "更新除以下配置"
+log_warning "更新以下配置"
 log_warning "~/.zshrc"
 log_warning "~/.zprofile"
 log_warning "~/.lldbinit"
 log_warning "~/.pip"
 log_warning "~/.gitignore_global"
+log_warning "~/.hyper.js"
 
 ## 软链当前配置
 ln -sf $zshrc ~/.zshrc
@@ -307,6 +308,7 @@ ln -sf $zprofile ~/.zprofile
 ln -sf $lldbinit ~/.lldbinit
 ln -sf ${profiles_path}/.pip ~/.pip
 ln -sf ${profiles_path}/.gitignore_global ~/.gitignore_global
+ln -sf ${profiles_path}/.hyper.js ~/.hyper.js
 
 setup_bstools
 setup_brew_if_needed
