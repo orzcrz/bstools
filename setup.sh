@@ -16,49 +16,75 @@ zprofile=$profiles_path/.zprofile
 lldbinit=$profiles_path/lldb/.lldbinit
 
 # logger
-loglevel=0
-function log() {
-  local logtype=$1
-  local msg=$2
-  local datetime=$(date +'%F %H:%M:%S')
-  local logformat="[${logtype}] ${datetime} - ${msg}"
-  {
-  case $logtype in
+# debug:0; info:1; warn:2; error:3
+log_level=1
+log_detail=0
+
+logging() {
+  local log_type
+  log_type=$1
+  readonly log_type
+
+  local msg
+  msg=$2
+  readonly msg
+
+  local now
+  now=$(date +'%F %H:%M:%S')
+  readonly now
+
+  local log_format="[${log_type}]:[${now}] ${msg}"
+  if [[ ${log_detail} -eq 1 ]]; then
+    log_format="[${log_type}]:[${now}] [${FUNCNAME[2]} - $(caller 0 | awk '{print$1}')] ${msg}"
+  fi
+
+  case $log_type in
   DEBUG)
-    [[ $loglevel -le 0 ]] && echo -e "\033[34m${logformat}\033[0m" ;;
+    if [[ $log_level -le 0 ]]; then
+      echo -e "\033[37m${log_format}\033[0m"
+    fi
+    ;;
   INFO)
-    [[ $loglevel -le 1 ]] && echo -e "\033[32m${logformat}\033[0m" ;;
+    if [[ $log_level -le 1 ]]; then
+      echo -e "\033[32m${log_format}\033[0m"
+    fi
+    ;;
   WARNING)
-    [[ $loglevel -le 2 ]] && echo -e "\033[33m${logformat}\033[0m" ;;
+    if [[ $log_level -le 2 ]]; then
+      echo -e "\033[33m${log_format}\033[0m"
+    fi
+    ;;
   ERROR)
-    [[ $loglevel -le 3 ]] && echo -e "\033[31m${logformat}\033[0m" ;;
+    if [[ $log_level -le 3 ]]; then
+      echo -e "\033[31m${log_format}\033[0m"
+    fi
+    ;;
   esac
-  }
 }
 
-function log_debug() {
-  log DEBUG "$*"
+log_debug() {
+  logging DEBUG "$*"
 }
 
-function log_info() {
-  log INFO "$*"
+log_info() {
+  logging INFO "$*"
 }
 
-function log_warning() {
-  log WARNING "$*"
+log_warning() {
+  logging WARNING "$*"
 }
 
-function log_error() {
-  log ERROR "$*"
+log_error() {
+  logging ERROR "$*"
 }
 
 # 安装bstools
 function setup_bstools() {
   log_info "==> 尝试安装 bstools"
 
-  rm -rf $root_dir
+  rm -rf "$root_dir"
   local tools_url=git@github.com:orzcrz/bstools.git
-  git clone --depth 1 --recurse-submodules $tools_url $root_dir
+  git clone --depth 1 --recurse-submodules $tools_url "$root_dir"
   log_info "已下载最新版本到本地"
 
   log_info "导入环境变量"
@@ -75,7 +101,7 @@ function setup_bstools() {
     fi
   done
 
-  cd $root_dir
+  cd "$root_dir"
   local py3=$(which python3)
   log_info "Use python3 path: $py3"
   local py3_v=`$py3 -V`
@@ -99,7 +125,7 @@ function setup_bstools() {
     exit 1
   fi
   
-  rm -rf $root_dir/.git
+  rm -rf "$root_dir"/.git
 
   cd ~
 }

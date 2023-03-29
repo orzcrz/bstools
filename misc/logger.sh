@@ -3,47 +3,64 @@
 # Created by crzorz on 2022/09/16
 # Copyright © 2022 BaldStudio. All rights reserved.
 
-# debug:0; info:1; warning:2; error:3
-loglevel=0
-log_detail=
-logfile="./$(date +'%F').log"
+# debug:0; info:1; warn:2; error:3
+log_level=2
+log_detail=0
 
-log() {
+logging() {
+  local log_type
+  log_type=$1
+  readonly log_type
+
   local msg
-  local logtype
-  logtype=$1
   msg=$2
-  datetime=$(date +'%F %H:%M:%S')
-  logformat="[${logtype}] ${msg}"
-  if [[ ${log_detail} == 1 ]]; then
-    logformat="[${logtype}] ${datetime} [${FUNCNAME[2]} - $(caller 0 | awk '{print$1}')] ${msg}"
+  readonly msg
+
+  local now
+  now=$(date +'%F %H:%M:%S')
+  readonly now
+
+  local log_format="[${log_type}]:[${now}] ${msg}"
+  if [[ ${log_detail} -eq 1 ]]; then
+    log_format="[${log_type}]:[${now}] [${FUNCNAME[2]} - $(caller 0 | awk '{print$1}')] ${msg}"
   fi
-  {
-    case $logtype in
-      DEBUG)
-        [[ $loglevel -le 0 ]] && echo -e "\033[37m${logformat}\033[0m" ;;
-      INFO)
-        [[ $loglevel -le 1 ]] && echo -e "\033[32m${logformat}\033[0m" ;;
-      WARNING)
-        [[ $loglevel -le 2 ]] && echo -e "\033[33m${logformat}\033[0m" ;;
-      ERROR)
-        [[ $loglevel -le 3 ]] && echo -e "\033[31m${logformat}\033[0m" ;;
-    esac
-  } #| tee -a $logfile
+
+  case $log_type in
+  DEBUG)
+    if [[ $log_level -le 0 ]]; then
+      echo -e "\033[37m${log_format}\033[0m"
+    fi
+    ;;
+  INFO)
+    if [[ $log_level -le 1 ]]; then
+      echo -e "\033[32m${log_format}\033[0m"
+    fi
+    ;;
+  WARNING)
+    if [[ $log_level -le 2 ]]; then
+      echo -e "\033[33m${log_format}\033[0m"
+    fi
+    ;;
+  ERROR)
+    if [[ $log_level -le 3 ]]; then
+      echo -e "\033[31m${log_format}\033[0m"
+    fi
+    ;;
+  esac
 }
 
 log_debug() {
-  log DEBUG "$*"
+  logging DEBUG "$*"
 }
 
 log_info() {
-  log INFO "$*"
+  logging INFO "$*"
 }
 
 log_warning() {
-  log WARNING "$*"
+  logging WARNING "$*"
 }
 
 log_error() {
-  log ERROR "$*"
+  logging ERROR "$*"
 }
