@@ -16,8 +16,8 @@ from bstools.portal import main
 
 version_file = os.path.join(ROOT_DIR, 'version')
 if not os.path.exists(version_file):
-	with open(version_file, 'w', encoding='utf-8') as f:
-		f.write(VERSION)
+    with open(version_file, 'w', encoding='utf-8') as f:
+        f.write(VERSION)
 
 if __name__ == '__main__':
-	main()
+    main()

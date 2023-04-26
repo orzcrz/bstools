@@ -2,15 +2,26 @@
 
 用工具同步本地环境，有点意思了不是吗？
 
-## 使用
+## 使用须知
 
-**如果是已有环境，请先备份好$HOME下的已有配置文件，脚本涉及部分文件的删除替换。**
+- **如果是已有环境，请先备份好$HOME下的已有配置文件，脚本涉及部分文件的删除替换。**
 
+- **如果是 _intel_ 处理器需要手动预装 `Homebrew`。**
+```
+/bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
+```
+  
+- **如果没有安装过 `Xcode Command Line`，需要手动安装。**
+```
+xcode-select --install
+```
+
+## 安装命令
 ```
 curl https://raw.githubusercontent.com/orzcrz/bstools/master/setup.sh | bash
 ```
 
-## 配置项
+## 包含配置
 
 - oh-my-zsh
 - dk_lldb
