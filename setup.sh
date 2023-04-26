@@ -320,6 +320,8 @@ echo "  准备配置环境"
 echo "################################"
 echo "$(tput sgr0)"
 
+setup_bstools
+
 log_warning "更新以下配置"
 log_warning "~/.zshrc"
 log_warning "~/.zprofile"
@@ -338,7 +340,6 @@ ln -sf ${profiles_path}/.gitignore_global ~/.gitignore_global
 ln -sf ${profiles_path}/zsh-syntax-highlighting $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 ln -sf ${profiles_path}/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
 
-setup_bstools
 setup_brew_if_needed
 setup_pyenv
 setup_wget
