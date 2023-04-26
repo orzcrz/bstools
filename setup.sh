@@ -328,8 +328,10 @@ log_warning "~/.zprofile"
 log_warning "~/.lldbinit"
 log_warning "~/.pip"
 log_warning "~/.gitignore_global"
-log_warning "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-log_warning "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+
+zsh_plugin_path=${profiles_path}/oh-my-zsh/custom/plugins
+log_warning "${zsh_plugin_path}/zsh-syntax-highlighting"
+log_warning "${zsh_plugin_path}/zsh-autosuggestions"
 
 ## 软链当前配置
 ln -sf $zshrc ~/.zshrc
@@ -337,8 +339,8 @@ ln -sf $zprofile ~/.zprofile
 ln -sf $lldbinit ~/.lldbinit
 ln -sf ${profiles_path}/.pip ~/.pip
 ln -sf ${profiles_path}/.gitignore_global ~/.gitignore_global
-ln -sf ${profiles_path}/zsh-syntax-highlighting $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
-ln -sf ${profiles_path}/zsh-autosuggestions $ZSH_CUSTOM/plugins/zsh-autosuggestions
+ln -sf ${profiles_path}/zsh-syntax-highlighting ${zsh_plugin_path}/zsh-syntax-highlighting
+ln -sf ${profiles_path}/zsh-autosuggestions ${zsh_plugin_path}/zsh-autosuggestions
 
 setup_brew_if_needed
 setup_pyenv
