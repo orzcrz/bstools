@@ -148,8 +148,7 @@ function setup_brew_if_needed() {
       sudo chown -R $(whoami) $brew_repo
       curl -L $remote_url | tar xz --strip 1 -C $brew_repo
     else
-      log_error "非arm版的没适配，自己动手吧"
-      exit
+      log_warning "非arm版的没适配，应该默认就有吧"
     fi
   fi
 
