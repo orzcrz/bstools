@@ -36,6 +36,8 @@ curl https://raw.githubusercontent.com/orzcrz/bstools/master/setup.sh | bash
 - tree
 - rbenv
 - cocoapods
+- lldb_chisel
+- node
 
 ### 软链
 

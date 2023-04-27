@@ -317,6 +317,16 @@ function setup_lldb_chisel() {
   echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $lldbinit
 }
 
+function setup_node() {
+  brew install node && log_info "已安装 Node.js"
+  ## 查看当前的镜像
+  ## 原 https://registry.npmjs.org
+  log_info "原镜像：${npm get registry}"
+  ## 将地址设置为淘宝镜像
+  npm config set registry https://registry.npm.taobao.org/
+  log_info "修改镜像为：${npm get registry}"
+}
+
 echo "$(tput setaf 2)"
 echo "################################"
 echo "  准备配置环境"
@@ -353,10 +363,11 @@ setup_tree
 setup_rbenv
 setup_cocoapods
 setup_lldb_chisel
+setup_node
 
-brew tap homebrew/cask
+# brew tap homebrew/cask
 # 安装vscode
-brew install --cask visual-studio-code
+# brew install --cask visual-studio-code
 
 echo "$(tput setaf 2)"
 echo "################################"
