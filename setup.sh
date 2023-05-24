@@ -116,14 +116,6 @@ function setup_bstools() {
   set +e
   pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
   set -e
-
-  source ~/.zprofile
-  if command -v bs 1>/dev/null 2>&1; then
-    log_info "安装成功"
-  else
-    log_error "安装失败"
-    exit 1
-  fi
   
   rm -rf "$root_dir"/.git
 
@@ -321,10 +313,10 @@ function setup_node() {
   brew install node && log_info "已安装 Node.js"
   ## 查看当前的镜像
   ## 原 https://registry.npmjs.org
-  log_info "原镜像：${npm get registry}"
+  log_info "原镜像：$(npm get registry)"
   ## 将地址设置为淘宝镜像
   npm config set registry https://registry.npm.taobao.org/
-  log_info "修改镜像为：${npm get registry}"
+  log_info "修改镜像为：$(npm get registry)"
 }
 
 echo "$(tput setaf 2)"
