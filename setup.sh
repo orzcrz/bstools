@@ -283,7 +283,12 @@ function setup_cocoapods() {
     log_info "已存在，跳过安装"
   else
     log_info "安装路径为：$HOME/.gem/"
-    gem install cocoapods --user && log_info "已安装 cocoapods"
+    
+    ## M1
+    # gem install cocoapods --user && log_info "已安装 cocoapods"
+
+    ## intel
+    gem install -n /usr/local/bin cocoapods && log_info "已安装 cocoapods"
   fi
 
   log_info "导入环境变量"
@@ -352,7 +357,7 @@ setup_pyenv
 setup_wget
 setup_cookiecutter
 setup_tree
-setup_rbenv
+# setup_rbenv
 setup_cocoapods
 setup_lldb_chisel
 setup_node
