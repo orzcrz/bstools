@@ -4,5 +4,8 @@ command script import ~/.bstools/profiles/lldb/zlldb/main.py
 ## dklldb https://github.com/DerekSelander/LLDB
 command script import ~/.bstools/profiles/lldb/dk_lldb/lldb_commands/dslldb.py
 
+## chisel
+command script import /opt/homebrew/opt/chisel/libexec/fblldb.py
+
 ## others
 ## https://github.com/ddrccw/mac-config/blob/master/.lldbinit

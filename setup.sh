@@ -87,19 +87,19 @@ function setup_bstools() {
   git clone --depth 1 --recurse-submodules $tools_url "$root_dir"
   log_info "已下载最新版本到本地"
 
-  log_info "导入环境变量"
-  local pattern="## bstools"
-  local env="export BSTOOLS_ROOT=\$HOME/.bstools\nexport PATH=\$BSTOOLS_ROOT/bin:\$PATH"
-  local line="$pattern\n$env"
-  local files=(
-    $zprofile
-  )
-  for i in "${!files[@]}"; do
-    local file="${files[i]}"
-    if [[ -f "$file" ]];then
-      grep -F "$pattern" "$file" 1>/dev/null 2>&1 || echo -e "$line" >> "$file"
-    fi
-  done
+#   log_info "导入环境变量"
+#   local pattern="## bstools"
+#   local env="export BSTOOLS_ROOT=\$HOME/.bstools\nexport PATH=\$BSTOOLS_ROOT/bin:\$PATH"
+#   local line="$pattern\n$env"
+#   local files=(
+#     $zprofile
+#   )
+#   for i in "${!files[@]}"; do
+#     local file="${files[i]}"
+#     if [[ -f "$file" ]];then
+#       grep -F "$pattern" "$file" 1>/dev/null 2>&1 || echo -e "$line" >> "$file"
+#     fi
+#   done
 
   cd "$root_dir"
   local py3=$(which python3)
@@ -115,6 +115,7 @@ function setup_bstools() {
   
   set +e
   pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple/
+  python -m pip install --upgrade pip
   set -e
   
   rm -rf "$root_dir"/.git
@@ -148,27 +149,27 @@ function setup_brew_if_needed() {
       curl -L $remote_url | tar xz --strip 1 -C $brew_repo
     fi
 
-    log_info "导入环境变量"    
-    echo -e "\n## homebrew" >> $zprofile
-    echo "export PATH=$brew_repo/bin:\$PATH" >> $zprofile
-    echo "export PATH=$brew_repo/sbin:\$PATH" >> $zprofile
-    echo "export HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
-    echo "export HOMEBREW_BREW_GIT_REMOTE=$repo_url" >> $zprofile
-    echo "export HOMEBREW_CORE_GIT_REMOTE=$core_url" >> $zprofile
-    echo "export HOMEBREW_NO_INSTALL_FROM_API=1" >> $zprofile
+    # log_info "导入环境变量"    
+    # echo -e "\n## homebrew" >> $zprofile
+    # echo "export PATH=$brew_repo/bin:\$PATH" >> $zprofile
+    # echo "export PATH=$brew_repo/sbin:\$PATH" >> $zprofile
+    # echo "export HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
+    # echo "export HOMEBREW_BREW_GIT_REMOTE=$repo_url" >> $zprofile
+    # echo "export HOMEBREW_CORE_GIT_REMOTE=$core_url" >> $zprofile
+    # echo "export HOMEBREW_NO_INSTALL_FROM_API=1" >> $zprofile
 
   else
     log_warning "非arm版的没适配，先手动预装吧"
     log_info '手动执行这段 ==> /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"'
 
     # 装好了就插入环境变量
-    if command -v brew 1>/dev/null 2>&1; then
-      echo -e "\n## homebrew" >> $zprofile
-      echo "export HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
-      echo "export HOMEBREW_BREW_GIT_REMOTE=$repo_url" >> $zprofile
-      echo "export HOMEBREW_CORE_GIT_REMOTE=$core_url" >> $zprofile
-      echo "export HOMEBREW_NO_INSTALL_FROM_API=1" >> $zprofile
-    fi
+    # if command -v brew 1>/dev/null 2>&1; then
+    #   echo -e "\n## homebrew" >> $zprofile
+    #   echo "export HOMEBREW_BOTTLE_DOMAIN=$bottles_url" >> $zprofile
+    #   echo "export HOMEBREW_BREW_GIT_REMOTE=$repo_url" >> $zprofile
+    #   echo "export HOMEBREW_CORE_GIT_REMOTE=$core_url" >> $zprofile
+    #   echo "export HOMEBREW_NO_INSTALL_FROM_API=1" >> $zprofile
+    # fi
   fi
 
   cd ~
@@ -190,14 +191,14 @@ function setup_pyenv() {
     brew install pyenv pyenv-virtualenv && log_info "已安装 pyenv"
   fi
 
-  log_info "导入环境变量"
-  echo -e "\n## pyenv" >> $zprofile
-  echo 'export PYENV_ROOT=$HOME/.pyenv' >> $zprofile
-  echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> $zprofile
-  echo 'if command -v pyenv 1>/dev/null 2>&1; then' >> $zprofile
-  echo '  eval "$(pyenv init -)"' >> $zprofile
-  echo '  eval "$(pyenv virtualenv-init -)"' >> $zprofile
-  echo 'fi' >> $zprofile
+#   log_info "导入环境变量"
+#   echo -e "\n## pyenv" >> $zprofile
+#   echo 'export PYENV_ROOT=$HOME/.pyenv' >> $zprofile
+#   echo 'export PATH=$PYENV_ROOT/shims:$PATH' >> $zprofile
+#   echo 'if command -v pyenv 1>/dev/null 2>&1; then' >> $zprofile
+#   echo '  eval "$(pyenv init -)"' >> $zprofile
+#   echo '  eval "$(pyenv virtualenv-init -)"' >> $zprofile
+#   echo 'fi' >> $zprofile
 
   log_info "pip源已在$HOME/.pip中配置"
 
@@ -259,14 +260,14 @@ function setup_rbenv() {
   gem source -a https://gems.ruby-china.com
   log_info "当前Ruby源为：https://gems.ruby-china.com"
 
-  log_info "导入环境变量"
-  local mirror_url=https://cache.ruby-china.com
-  echo -e "\n## rbenv" >> $zprofile
-  echo 'export PATH=$HOME/.rbenv/bin:$PATH' >> $zprofile
-  echo "export RUBY_BUILD_MIRROR_URL=$mirror_url" >> $zprofile
-  echo 'if command -v rbenv 1>/dev/null 2>&1; then' >> $zprofile
-  echo '  eval "$(rbenv init -)"' >> $zprofile
-  echo 'fi' >> $zprofile
+#   log_info "导入环境变量"
+#   local mirror_url=https://cache.ruby-china.com
+#   echo -e "\n## rbenv" >> $zprofile
+#   echo 'export PATH=$HOME/.rbenv/bin:$PATH' >> $zprofile
+#   echo "export RUBY_BUILD_MIRROR_URL=$mirror_url" >> $zprofile
+#   echo 'if command -v rbenv 1>/dev/null 2>&1; then' >> $zprofile
+#   echo '  eval "$(rbenv init -)"' >> $zprofile
+#   echo 'fi' >> $zprofile
 
   source ~/.zprofile
   if command -v rbenv 1>/dev/null 2>&1; then
@@ -285,18 +286,18 @@ function setup_cocoapods() {
     log_info "安装路径为：$HOME/.gem/"
     
     ## M1
-    # gem install cocoapods --user && log_info "已安装 cocoapods"
+    gem install cocoapods --user-install && log_info "已安装 cocoapods"
 
     ## intel
-    gem install -n /usr/local/bin cocoapods && log_info "已安装 cocoapods"
+    # gem install -n /usr/local/bin cocoapods && log_info "已安装 cocoapods"
   fi
 
-  log_info "导入环境变量"
-  local install_dir=`gem env | grep "USER INSTALLATION DIRECTORY" | awk -F":" '{ print  $2 }' | tr -d '[:space:]'`
-  local bin_dir="$install_dir/bin"
-  echo -e "\n## gem" >> $zprofile
-  echo 'export GEM_HOME=$HOME/.gem' >> $zprofile
-  echo "export PATH=$bin_dir:\$PATH" >> $zprofile
+#   log_info "导入环境变量"
+#   local install_dir=`gem env | grep "USER INSTALLATION DIRECTORY" | awk -F":" '{ print  $2 }' | tr -d '[:space:]'`
+#   local bin_dir="$install_dir/bin"
+#   echo -e "\n## gem" >> $zprofile
+#   echo 'export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"' >> $zprofile
+#   echo 'export PATH="$PATH:$GEM_HOME/bin"' >> $zprofile
 
   source ~/.zprofile
   if command -v pod 1>/dev/null 2>&1; then
@@ -310,8 +311,8 @@ function setup_cocoapods() {
 # https://github.com/facebook/chisel
 function setup_lldb_chisel() {
   brew install chisel && log_info "已安装 chisel"
-  echo -e "\n## chisel" >> $lldbinit
-  echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $lldbinit
+#   echo -e "\n## chisel" >> $lldbinit
+#   echo 'command script import /opt/homebrew/opt/chisel/libexec/fblldb.py' >> $lldbinit
 }
 
 function setup_node() {
@@ -357,7 +358,7 @@ setup_pyenv
 setup_wget
 setup_cookiecutter
 setup_tree
-# setup_rbenv
+setup_rbenv
 setup_cocoapods
 setup_lldb_chisel
 setup_node
