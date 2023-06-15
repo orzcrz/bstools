@@ -28,7 +28,7 @@ LOG_FORMAT = ColoredFormatter(
 stream = logging.StreamHandler()
 stream.setFormatter(LOG_FORMAT)
 
-logger = logging.getLogger('cg')
+logger = logging.getLogger('bs')
 logger.addHandler(stream)
 
 
