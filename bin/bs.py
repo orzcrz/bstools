@@ -12,7 +12,7 @@ import sys
 sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
 from bstools import VERSION, ROOT_DIR
-from bstools.portal import main
+from bstools.main import main
 
 version_file = os.path.join(ROOT_DIR, 'version')
 if not os.path.exists(version_file):

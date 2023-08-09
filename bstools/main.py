@@ -10,7 +10,7 @@ import argparse
 import time
 
 from bstools import VERSION
-from bstools.utils.logging import logger, LogLevel
+from bstools.misc.logging import logger, LogLevel
 from bstools.registry import PLUGINS
 from bstools.update import update_if_needed
 

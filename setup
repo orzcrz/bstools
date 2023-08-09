@@ -134,8 +134,8 @@ function setup_brew_if_needed() {
   # local repo_url=https://mirrors.aliyun.com/homebrew/brew.git
   # local core_url=https://mirrors.aliyun.com/homebrew/homebrew-core.git
 
-  local cpu_brand=`sysctl -n machdep.cpu.brand_string`
-  local cpu_arch=`uname -m`
+  local cpu_brand=$(sysctl -n machdep.cpu.brand_string)
+  local cpu_arch=$(uname -m)
   log_info "处理器信息： $cpu_brand | $cpu_arch"
   if [[ "$cpu_brand" =~ "Apple" ]] && [[ "$cpu_arch" =~ "arm" ]]; then
     if command -v brew 1>/dev/null 2>&1; then
@@ -345,13 +345,13 @@ log_warning "${zsh_plugin_path}/zsh-syntax-highlighting"
 log_warning "${zsh_plugin_path}/zsh-autosuggestions"
 
 ## 软链当前配置
-ln -sf $zshrc ~/.zshrc
-ln -sf $zprofile ~/.zprofile
-ln -sf $lldbinit ~/.lldbinit
-ln -sf ${profiles_path}/.pip ~/.pip
-ln -sf ${profiles_path}/.gitignore_global ~/.gitignore_global
-ln -sf ${profiles_path}/zsh-syntax-highlighting ${zsh_plugin_path}/zsh-syntax-highlighting
-ln -sf ${profiles_path}/zsh-autosuggestions ${zsh_plugin_path}/zsh-autosuggestions
+ln -sf "$zshrc" ~/.zshrc
+ln -sf "$zprofile" ~/.zprofile
+ln -sf "$lldbinit" ~/.lldbinit
+ln -sf "${profiles_path}"/.pip ~/.pip
+ln -sf "${profiles_path}"/.gitignore_global ~/.gitignore_global
+ln -sf "${profiles_path}"/zsh-syntax-highlighting "${zsh_plugin_path}"/zsh-syntax-highlighting
+ln -sf "${profiles_path}"/zsh-autosuggestions "${zsh_plugin_path}"/zsh-autosuggestions
 
 setup_brew_if_needed
 setup_pyenv

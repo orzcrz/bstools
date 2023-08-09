@@ -10,7 +10,7 @@ import os
 import shutil
 import subprocess
 
-from bstools.utils.logging import logger
+from bstools.misc.logging import logger
 
 
 class CleanMac:

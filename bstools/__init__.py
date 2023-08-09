@@ -8,7 +8,7 @@ Copyright © 2022 BaldStudio. All rights reserved.
 
 import os
 
-VERSION = '1.0.0' 
+VERSION = '1.0.1' 
 
 GIT = '/usr/bin/git'
 

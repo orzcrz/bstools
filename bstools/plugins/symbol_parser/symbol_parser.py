@@ -11,7 +11,7 @@ import sys
 import subprocess
 import fnmatch
 
-from bstools.utils.logging import logger
+from bstools.misc.logging import logger
 
 DEVELOPER_DIR = subprocess.getoutput('xcode-select --print-path')
 XCODE_CONTENT_DIR = os.path.dirname(DEVELOPER_DIR)
