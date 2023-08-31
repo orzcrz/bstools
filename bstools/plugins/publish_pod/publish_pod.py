@@ -9,6 +9,7 @@ Copyright © 2023 BaldStudio. All rights reserved.
 import re
 import subprocess
 import tempfile
+import json
 
 from typing import AnyStr
 from bstools import GIT
@@ -24,6 +25,18 @@ def is_git_repo(verbose) -> AnyStr:
     logger.debug('Running: %r', cmd)
     if verbose:
         return subprocess.check_output(cmd).decode()
+    process = subprocess.Popen(cmd,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               universal_newlines=True)
+    return str(process.communicate()[0].strip())
+
+
+def git_head_commit() -> AnyStr:
+    cmd = [
+        GIT, 'rev-parse', '--short', 'HEAD'
+    ]
+    logger.debug('Running: %r', cmd)
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,
@@ -125,22 +138,6 @@ def try_patched_pod():
                     continue
                 symlink_force(src_file, os.path.abspath(dst_file))
                 logger.info('🩹 替换文件 %s' % f)
-
-
-# 更新 podspec 版本号
-def update_podspec(version):
-    podspec_file = os.path.basename(os.getcwd()) + '.podspec'
-    logger.debug('当前podspec文件：%s', podspec_file)
-    temp_dir = tempfile.mkdtemp()
-    podspec_temp_file = os.path.join(temp_dir, podspec_file)
-    logger.debug('修改版本号为 %s', version)
-    pattern = re.compile(r'(s.version)(\s*)=(\s*)[\'|\"](.*)[\'|\"]')
-    with open(podspec_file, 'r') as f1, open(podspec_temp_file, 'w') as f2:
-        for line in f1:
-            line = re.sub(pattern, 's.version      = \'%s\'' % version, line)
-            f2.write(line)
-    logger.debug(subprocess.check_output(['cat', podspec_temp_file]).decode())
-    return podspec_temp_file
 
 
 def push_pod_repo(podspec_file):
@@ -251,10 +248,41 @@ class PublishPod:
             subprocess.check_output(push)
         else:
             subprocess.check_call(push, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        podspec_file = update_podspec(version)
-        push_pod_repo(podspec_file)
+        podspec_json_file = self.update_podspec(version)
+        push_pod_repo(podspec_json_file)
         self.end_loading()
         postflight()
+
+    # 更新 podspec 信息
+    def update_podspec(self, version):
+        podspec_file = os.path.basename(os.getcwd()) + '.podspec'
+        logger.debug('当前podspec文件：%s', podspec_file)
+        logger.debug('修改版本号为 %s', version)
+
+        temp_dir = tempfile.mkdtemp()
+        podspec_json = os.path.join(temp_dir, podspec_file + '.json')
+        with open(podspec_json, 'w') as f:
+            pod = shutil.which('pod')
+            cmd = [
+                pod, 'ipc', 'spec', podspec_file,
+            ]
+            logger.debug('Running: %r', cmd)
+            subprocess.Popen(cmd, stdout=f).wait()
+
+        if self.args.release:
+            return podspec_json
+
+        with open(podspec_json, 'r') as f:
+            json_data = json.load(f)
+            json_data['source']['tag'] = version
+            json_data['source']['commit'] = git_head_commit()
+            logger.debug(json_data)
+
+        with open(podspec_json, 'w') as f:
+            if json_data:
+                f.write(json.dumps(json_data, indent=2))
+
+        return podspec_json
 
     def begin_loading(self):
         self._loading = Loader('☕️ 正在发布...', '', 0.05).start()
